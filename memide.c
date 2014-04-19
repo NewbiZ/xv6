@@ -1,15 +1,15 @@
 // Fake IDE disk; stores blocks in memory.
 // Useful for running kernel without scratch disk.
 
-#include "types.h"
-#include "defs.h"
-#include "param.h"
-#include "mmu.h"
-#include "proc.h"
-#include "x86.h"
-#include "traps.h"
-#include "spinlock.h"
-#include "buf.h"
+#include <types.h>
+#include <defs.h>
+#include <param.h>
+#include <mmu.h>
+#include <proc.h>
+#include <x86.h>
+#include <traps.h>
+#include <spinlock.h>
+#include <buf.h>
 
 extern uchar _binary_fs_img_start[], _binary_fs_img_size[];
 

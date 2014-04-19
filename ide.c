@@ -1,15 +1,15 @@
 // Simple PIO-based (non-DMA) IDE driver code.
 
-#include "types.h"
-#include "defs.h"
-#include "param.h"
-#include "memlayout.h"
-#include "mmu.h"
-#include "proc.h"
-#include "x86.h"
-#include "traps.h"
-#include "spinlock.h"
-#include "buf.h"
+#include <types.h>
+#include <defs.h>
+#include <param.h>
+#include <memlayout.h>
+#include <mmu.h>
+#include <proc.h>
+#include <x86.h>
+#include <traps.h>
+#include <spinlock.h>
+#include <buf.h>
 
 #define IDE_BSY       0x80
 #define IDE_DRDY      0x40
