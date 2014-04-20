@@ -1,6 +1,7 @@
 #include "types.h"
 #include "stat.h"
-#include "user.h"
+
+#include <klibc.h>
 
 static void
 putc(int fd, char c)

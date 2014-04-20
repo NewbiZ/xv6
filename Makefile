@@ -4,10 +4,10 @@ OBJS = \
 	exec.o\
 	file.o\
 	fs.o\
-	ide.o\
+	drivers/ide/ide.o\
 	ioapic.o\
 	kalloc.o\
-	kbd.o\
+	drivers/keyboard/kbd.o\
 	lapic.o\
 	log.o\
 	main.o\
@@ -36,7 +36,7 @@ OBJCOPY = objcopy
 OBJDUMP = objdump
 CFLAGS = -fno-pic -static -fno-builtin -fno-strict-aliasing -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer
 CFLAGS += $(shell $(CC) -fno-stack-protector -E -x c /dev/null >/dev/null 2>&1 && echo -fno-stack-protector)
-CFLAGS += -I$(shell pwd)/inc
+CFLAGS += -I$(shell pwd)/inc -I$(shell pwd)/klibc
 ASFLAGS = -m32 -gdwarf-2 -Wa,-divide
 ASFLAGS += -I$(shell pwd)/inc
 # FreeBSD ld wants ``elf_i386_fbsd''
@@ -77,25 +77,13 @@ kernel: $(OBJS) entry.o entryother initcode kernel.ld
 	$(OBJDUMP) -S kernel > kernel.asm
 	$(OBJDUMP) -t kernel | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$$/d' > kernel.sym
 
-# kernelmemfs is a copy of kernel that maintains the
-# disk image in memory instead of writing to a disk.
-# This is not so useful for testing persistent storage or
-# exploring disk buffering implementations, but it is
-# great for testing the kernel on real hardware without
-# needing a scratch disk.
-MEMFSOBJS = $(filter-out ide.o,$(OBJS)) memide.o
-kernelmemfs: $(MEMFSOBJS) entry.o entryother initcode fs.img
-	$(LD) $(LDFLAGS) -Ttext 0x100000 -e main -o kernelmemfs entry.o  $(MEMFSOBJS) -b binary initcode entryother fs.img
-	$(OBJDUMP) -S kernelmemfs > kernelmemfs.asm
-	$(OBJDUMP) -t kernelmemfs | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$$/d' > kernelmemfs.sym
-
 tags: $(OBJS) entryother.S _init
 	etags *.S *.c
 
 vectors.S: vectors.pl
 	perl vectors.pl > vectors.S
 
-ULIB = user/ulib.o user/usys.o user/printf.o user/umalloc.o
+ULIB = klibc/ulib.o klibc/usys.o klibc/printf.o klibc/umalloc.o
 
 _%: %.o $(ULIB)
 	$(LD) $(LDFLAGS) -N -e main -Ttext 0 -o $@ $^
@@ -163,6 +151,9 @@ clean:
 	.gdbinit \
 	$(UPROGS)
 	rm -rf user/*.o user/*.d user/*.asm user/*.sym
+	rm -rf drivers/keyboard/*.o drivers/keyboard/*.d drivers/keyboard/*.asm drivers/keyboard/*.sym
+	rm -rf drivers/ide/*.o drivers/ide/*.d drivers/ide/*.asm drivers/ide/*.sym
+	rm -rf klibc/*.o klibc/*.d klibc/*.asm klibc/*.sym
 
 # QEMU's gdb stub command line changed in 0.11
 QEMUGDB = $(shell if $(QEMU) -help | grep -q '^-gdb'; \

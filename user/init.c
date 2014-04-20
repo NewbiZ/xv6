@@ -4,7 +4,7 @@
 #include <stat.h>
 #include <fcntl.h>
 
-#include "user.h"
+#include <klibc.h>
 
 char *argv[] = { "sh", 0 };
 

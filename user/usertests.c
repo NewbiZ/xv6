@@ -7,7 +7,7 @@
 #include <traps.h>
 #include <memlayout.h>
 
-#include "user.h"
+#include <klibc.h>
 
 char buf[8192];
 char name[3];

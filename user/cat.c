@@ -1,7 +1,7 @@
 #include <types.h>
 #include <stat.h>
 
-#include "user.h"
+#include <klibc.h>
 
 char buf[512];
 

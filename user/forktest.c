@@ -4,7 +4,7 @@
 #include <types.h>
 #include <stat.h>
 
-#include "user.h"
+#include <klibc.h>
 
 #define N  1000
 

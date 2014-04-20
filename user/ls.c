@@ -2,7 +2,7 @@
 #include <stat.h>
 #include <fs.h>
 
-#include "user.h"
+#include <klibc.h>
 
 char*
 fmtname(char *path)
