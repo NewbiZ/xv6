@@ -8,10 +8,10 @@
 #include <assert.h>
 
 #define stat xv6_stat  // avoid clash with host struct stat
-#include "include/types.h"
-#include "include/fs.h"
-#include "include/stat.h"
-#include "include/param.h"
+#include "../include/types.h"
+#include "../include/fs.h"
+#include "../include/stat.h"
+#include "../include/param.h"
 
 #define static_assert(a, b) do { switch (0) case 0: case (a): ; } while (0)
 
