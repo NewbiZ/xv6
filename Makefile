@@ -1,22 +1,22 @@
 OBJS = \
-	bio.o\
+	fs/bio.o\
 	console.o\
 	exec.o\
 	file.o\
-	fs.o\
+	fs/fs.o\
 	drivers/ide/ide.o\
 	ioapic.o\
 	kalloc.o\
 	drivers/keyboard/kbd.o\
 	lapic.o\
-	log.o\
+	fs/log.o\
 	main.o\
 	mp.o\
 	picirq.o\
 	pipe.o\
 	proc.o\
 	spinlock.o\
-	string.o\
+	klibc/string.o\
 	swtch.o\
 	syscall.o\
 	sysfile.o\
@@ -24,7 +24,7 @@ OBJS = \
 	timer.o\
 	trapasm.o\
 	trap.o\
-	uart.o\
+	drivers/serial/uart.o\
 	vectors.o\
 	vm.o\
 
@@ -153,7 +153,9 @@ clean:
 	rm -rf user/*.o user/*.d user/*.asm user/*.sym
 	rm -rf drivers/keyboard/*.o drivers/keyboard/*.d drivers/keyboard/*.asm drivers/keyboard/*.sym
 	rm -rf drivers/ide/*.o drivers/ide/*.d drivers/ide/*.asm drivers/ide/*.sym
+	rm -rf drivers/serial/*.o drivers/serial/*.d drivers/serial/*.asm drivers/serial/*.sym
 	rm -rf klibc/*.o klibc/*.d klibc/*.asm klibc/*.sym
+	rm -rf fs/*.o fs/*.d fs/*.asm fs/*.sym
 
 # QEMU's gdb stub command line changed in 0.11
 QEMUGDB = $(shell if $(QEMU) -help | grep -q '^-gdb'; \
