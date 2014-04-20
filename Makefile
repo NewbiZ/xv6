@@ -1,32 +1,32 @@
 OBJS = \
 	fs/bio.o\
-	console.o\
-	exec.o\
-	file.o\
+	kernel/console.o\
+	kernel/exec.o\
+	kernel/file.o\
 	fs/fs.o\
 	drivers/ide/ide.o\
-	ioapic.o\
-	kalloc.o\
+	kernel/ioapic.o\
+	kernel/kalloc.o\
 	drivers/keyboard/kbd.o\
-	lapic.o\
+	kernel/lapic.o\
 	fs/log.o\
-	main.o\
-	mp.o\
-	picirq.o\
-	pipe.o\
-	proc.o\
-	spinlock.o\
+	boot/main.o\
+	kernel/mp.o\
+	kernel/picirq.o\
+	kernel/pipe.o\
+	kernel/proc.o\
+	kernel/spinlock.o\
 	klibc/string.o\
-	swtch.o\
-	syscall.o\
-	sysfile.o\
-	sysproc.o\
-	timer.o\
-	trapasm.o\
-	trap.o\
+	kernel/swtch.o\
+	kernel/syscall.o\
+	kernel/sysfile.o\
+	kernel/sysproc.o\
+	kernel/timer.o\
+	kernel/trapasm.o\
+	kernel/trap.o\
 	drivers/serial/uart.o\
-	vectors.o\
-	vm.o\
+	kernel/vectors.o\
+	vmm/vm.o\
 
 QEMU=qemu
 CC = gcc
@@ -42,46 +42,38 @@ ASFLAGS += -I$(shell pwd)/include
 # FreeBSD ld wants ``elf_i386_fbsd''
 LDFLAGS += -m $(shell $(LD) -V | grep elf_i386 2>/dev/null)
 
-xv6.img: bootblock kernel fs.img
+xv6.img: bootblock kernel.img fs.img
 	dd if=/dev/zero of=xv6.img count=10000
 	dd if=bootblock of=xv6.img conv=notrunc
-	dd if=kernel of=xv6.img seek=1 conv=notrunc
+	dd if=kernel.img of=xv6.img seek=1 conv=notrunc
 
-xv6memfs.img: bootblock kernelmemfs
-	dd if=/dev/zero of=xv6memfs.img count=10000
-	dd if=bootblock of=xv6memfs.img conv=notrunc
-	dd if=kernelmemfs of=xv6memfs.img seek=1 conv=notrunc
-
-bootblock: bootasm.S bootmain.c
-	$(CC) $(CFLAGS) -fno-pic -O -nostdinc -I. -c bootmain.c
-	$(CC) $(CFLAGS) -fno-pic -nostdinc -I. -c bootasm.S
+bootblock: boot/bootasm.S boot/bootmain.c
+	$(CC) $(CFLAGS) -fno-pic -O -nostdinc -I. -c boot/bootmain.c
+	$(CC) $(CFLAGS) -fno-pic -nostdinc -I. -c boot/bootasm.S
 	$(LD) $(LDFLAGS) -N -e start -Ttext 0x7C00 -o bootblock.o bootasm.o bootmain.o
 	$(OBJDUMP) -S bootblock.o > bootblock.asm
 	$(OBJCOPY) -S -O binary -j .text bootblock.o bootblock
-	./sign.pl bootblock
+	./tools/boot_sign.pl bootblock
 
-entryother: entryother.S
-	$(CC) $(CFLAGS) -fno-pic -nostdinc -I. -c entryother.S
+entryother: boot/entryother.S
+	$(CC) $(CFLAGS) -fno-pic -nostdinc -I. -c boot/entryother.S
 	$(LD) $(LDFLAGS) -N -e start -Ttext 0x7000 -o bootblockother.o entryother.o
 	$(OBJCOPY) -S -O binary -j .text bootblockother.o entryother
 	$(OBJDUMP) -S bootblockother.o > entryother.asm
 
-initcode: initcode.S
-	$(CC) $(CFLAGS) -nostdinc -I. -c initcode.S
+initcode: kernel/initcode.S
+	$(CC) $(CFLAGS) -nostdinc -I. -c kernel/initcode.S
 	$(LD) $(LDFLAGS) -N -e start -Ttext 0 -o initcode.out initcode.o
 	$(OBJCOPY) -S -O binary initcode.out initcode
 	$(OBJDUMP) -S initcode.o > initcode.asm
 
-kernel: $(OBJS) entry.o entryother initcode kernel.ld
-	$(LD) $(LDFLAGS) -T kernel.ld -o kernel entry.o $(OBJS) -b binary initcode entryother
-	$(OBJDUMP) -S kernel > kernel.asm
-	$(OBJDUMP) -t kernel | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$$/d' > kernel.sym
+kernel.img: $(OBJS) boot/entry.o entryother initcode kernel.ld
+	$(LD) $(LDFLAGS) -T kernel.ld -o kernel.img boot/entry.o $(OBJS) -b binary initcode entryother
+	$(OBJDUMP) -S kernel.img > kernel.asm
+	$(OBJDUMP) -t kernel.img | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$$/d' > kernel.sym
 
-tags: $(OBJS) entryother.S _init
+tags: $(OBJS) boot/entryother.S _init
 	etags *.S *.c
-
-vectors.S: vectors.pl
-	perl vectors.pl > vectors.S
 
 ULIB = klibc/ulib.o klibc/usys.o klibc/printf.o klibc/umalloc.o
 
@@ -146,8 +138,8 @@ fs.img: mkfs $(UPROGS)
 
 clean: 
 	rm -f *.tex *.dvi *.idx *.aux *.log *.ind *.ilg \
-	*.o *.d *.asm *.sym vectors.S bootblock entryother \
-	initcode initcode.out kernel xv6.img fs.img kernelmemfs mkfs \
+	*.o *.d *.asm *.sym bootblock entryother \
+	initcode initcode.out kernel.img xv6.img fs.img mkfs \
 	.gdbinit \
 	$(UPROGS)
 	rm -rf user/*.o user/*.d user/*.asm user/*.sym
@@ -156,6 +148,9 @@ clean:
 	rm -rf drivers/serial/*.o drivers/serial/*.d drivers/serial/*.asm drivers/serial/*.sym
 	rm -rf klibc/*.o klibc/*.d klibc/*.asm klibc/*.sym
 	rm -rf fs/*.o fs/*.d fs/*.asm fs/*.sym
+	rm -rf kernel/*.o kernel/*.d kernel/*.asm kernel/*.sym
+	rm -rf vmm/*.o vmm/*.d vmm/*.asm vmm/*.sym
+	rm -rf boot/*.o boot/*.d boot/*.asm boot/*.sym
 
 # QEMU's gdb stub command line changed in 0.11
 QEMUGDB = $(shell if $(QEMU) -help | grep -q '^-gdb'; \
