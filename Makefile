@@ -118,6 +118,23 @@ mkfs: mkfs.c inc/fs.h
 .PRECIOUS: %.o
 
 UPROGS=\
+	user/_cat\
+	user/_echo\
+	user/_forktest\
+	user/_grep\
+	user/_init\
+	user/_kill\
+	user/_ln\
+	user/_ls\
+	user/_mkdir\
+	user/_rm\
+	user/_sh\
+	user/_stressfs\
+	user/_usertests\
+	user/_wc\
+	user/_zombie\
+
+UPROGS_LOCAL=\
 	_cat\
 	_echo\
 	_forktest\
@@ -134,8 +151,8 @@ UPROGS=\
 	_wc\
 	_zombie\
 
-fs.img: mkfs README $(UPROGS)
-	./mkfs fs.img README $(UPROGS)
+fs.img: mkfs $(UPROGS)
+	cd user && ../mkfs ../fs.img $(UPROGS_LOCAL)
 
 -include *.d
 
@@ -145,26 +162,8 @@ clean:
 	initcode initcode.out kernel xv6.img fs.img kernelmemfs mkfs \
 	.gdbinit \
 	$(UPROGS)
-	rm -rf user/*.o user/*.d
+	rm -rf user/*.o user/*.d user/*.asm user/*.sym
 
-# make a printout
-FILES = $(shell grep -v '^\#' runoff.list)
-PRINT = runoff.list runoff.spec README toc.hdr toc.ftr $(FILES)
-
-xv6.pdf: $(PRINT)
-	./runoff
-	ls -l xv6.pdf
-
-print: xv6.pdf
-
-# run in emulators
-
-bochs : fs.img xv6.img
-	if [ ! -e .bochsrc ]; then ln -s dot-bochsrc .bochsrc; fi
-	bochs -q
-
-# try to generate a unique GDB port
-GDBPORT = $(shell expr `id -u` % 5000 + 25000)
 # QEMU's gdb stub command line changed in 0.11
 QEMUGDB = $(shell if $(QEMU) -help | grep -q '^-gdb'; \
 	then echo "-gdb tcp::$(GDBPORT)"; \

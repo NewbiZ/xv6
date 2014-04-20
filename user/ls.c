@@ -1,7 +1,8 @@
 #include <types.h>
 #include <stat.h>
-#include <user.h>
 #include <fs.h>
+
+#include "user.h"
 
 char*
 fmtname(char *path)

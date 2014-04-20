@@ -131,6 +131,7 @@ main(int argc, char *argv[])
     // The binaries are named _rm, _cat, etc. to keep the
     // build operating system from trying to execute them
     // in place of system binaries like rm and cat.
+    // Also skip the user/ prefix
     if(argv[i][0] == '_')
       ++argv[i];
 

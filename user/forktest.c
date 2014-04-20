@@ -3,15 +3,18 @@
 
 #include <types.h>
 #include <stat.h>
-#include <user.h>
+
+#include "user.h"
 
 #define N  1000
 
+/*
 void
 printf(int fd, char *s, ...)
 {
   write(fd, s, strlen(s));
 }
+*/
 
 void
 forktest(void)

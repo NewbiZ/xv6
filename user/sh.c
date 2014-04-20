@@ -1,8 +1,9 @@
 // Shell.
 
 #include <types.h>
-#include <user.h>
 #include <fcntl.h>
+
+#include "user.h"
 
 // Parsed command representation
 #define EXEC  1
