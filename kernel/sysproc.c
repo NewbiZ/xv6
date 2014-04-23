@@ -95,6 +95,7 @@ sys_uptime(void)
 int
 sys_getcwd(void)
 {
+    /*
     // Retrieve syscall arguments
     char *buf;
     int size;
@@ -128,6 +129,7 @@ sys_getcwd(void)
       iunlockput(pip);
     }
     iunlockput(ip);
+    */
     return 0;
 }
     
