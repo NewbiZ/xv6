@@ -1,5 +1,3 @@
-// Shell.
-
 #include <types.h>
 #include <fcntl.h>
 
@@ -145,20 +143,23 @@ getcmd(char *buf, int nbuf)
 int
 main(void)
 {
-  static char buf[100];
+  static char buf[256];
+  static char cwd[256];
   int fd;
   
   // Assumes three file descriptors open.
   while((fd = open("console", O_RDWR)) >= 0){
-    if(fd >= 3){
+    if (fd >= 3)
+    {
       close(fd);
       break;
     }
   }
   
   // Read and run input commands.
-  while(getcmd(buf, sizeof(buf)) >= 0){
-    if(buf[0] == 'c' && buf[1] == 'd' && buf[2] == ' '){
+  while (getcmd(buf, sizeof(buf)) >= 0){
+    // $ cd <path>
+    if (buf[0] == 'c' && buf[1] == 'd' && buf[2] == ' '){
       // Clumsy but will have to do for now.
       // Chdir has no effect on the parent if run in the child.
       buf[strlen(buf)-1] = 0;  // chop \n
@@ -166,10 +167,14 @@ main(void)
         printf(2, "cannot cd %s\n", buf+3);
       continue;
     }
+    // $ pwd
     if (buf[0] == 'p' && buf[1] == 'w' && buf[2] == 'd' && buf[3] == '\n'){
-        // print cwd here
+        if (getcwd(cwd, sizeof(cwd)) < 0)
+          panic("cannot retrieve cwd");
+        printf(1, "cwd: %s\n", cwd);
         continue;
     }
+    // $ <everything else>
     if(fork1() == 0)
       runcmd(parsecmd(buf));
     wait();
