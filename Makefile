@@ -113,6 +113,7 @@ UPROGS=\
 	user/_usertests\
 	user/_wc\
 	user/_zombie\
+	user/_halt\
 
 UPROGS_LOCAL=\
 	_cat\
@@ -130,6 +131,7 @@ UPROGS_LOCAL=\
 	_usertests\
 	_wc\
 	_zombie\
+	_halt\
 
 fs.img: mkfs $(UPROGS)
 	cd user && ../mkfs ../fs.img $(UPROGS_LOCAL)

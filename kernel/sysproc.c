@@ -132,4 +132,11 @@ sys_getcwd(void)
     */
     return 0;
 }
-    
+
+int
+sys_halt(void)
+{
+  // Hack: Hard coded ACPI shutdown for qemu/bochs
+  outw(0xB004, 0x0 | 0x2000);
+  return 0;
+}

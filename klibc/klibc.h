@@ -23,6 +23,7 @@ char* sbrk(int);
 int sleep(int);
 int uptime(void);
 int getcwd(char* buf, int size);
+int halt(void);
 
 // klib.c
 int stat(char*, struct stat*);
