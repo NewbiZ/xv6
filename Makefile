@@ -8,6 +8,7 @@ OBJS = \
 	kernel/ioapic.o\
 	kernel/kalloc.o\
 	drivers/keyboard/kbd.o\
+	drivers/acpi/acpi.o\
 	kernel/lapic.o\
 	fs/log.o\
 	boot/main.o\
@@ -148,6 +149,7 @@ clean:
 	rm -rf drivers/keyboard/*.o drivers/keyboard/*.d drivers/keyboard/*.asm drivers/keyboard/*.sym
 	rm -rf drivers/ide/*.o drivers/ide/*.d drivers/ide/*.asm drivers/ide/*.sym
 	rm -rf drivers/serial/*.o drivers/serial/*.d drivers/serial/*.asm drivers/serial/*.sym
+	rm -rf drivers/acpi/*.o drivers/acpi/*.d drivers/acpi/*.asm drivers/acpi/*.sym
 	rm -rf klibc/*.o klibc/*.d klibc/*.asm klibc/*.sym
 	rm -rf fs/*.o fs/*.d fs/*.asm fs/*.sym
 	rm -rf kernel/*.o kernel/*.d kernel/*.asm kernel/*.sym

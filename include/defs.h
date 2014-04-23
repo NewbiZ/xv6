@@ -23,6 +23,10 @@ void            panic(char*) __attribute__((noreturn));
 // exec.c
 int             exec(char*, char**);
 
+// acpi.c
+void            acpiinit(void);
+const char*     find_rsdp(void);
+
 // file.c
 struct file*    filealloc(void);
 void            fileclose(struct file*);
