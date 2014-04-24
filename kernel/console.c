@@ -13,6 +13,7 @@
 #include <mmu.h>
 #include <proc.h>
 #include <x86.h>
+#include <console.h>
 
 static void consputc(int);
 
@@ -113,7 +114,7 @@ panic(char *s)
   
   cli();
   cons.locking = 0;
-  cprintf("cpu%d: panic: ", cpu->id);
+  cprintf("\nKernel panic!\n");
   cprintf(s);
   cprintf("\n");
   getcallerpcs(&s, pcs);
@@ -130,7 +131,7 @@ panic(char *s)
 static ushort *crt = (ushort*)P2V(0xb8000);  // CGA memory
 
 static void
-cgaputc(int c)
+cgaputc(int c, int fgcolor, int bgcolor)
 {
   int pos;
   
@@ -145,7 +146,7 @@ cgaputc(int c)
   else if(c == BACKSPACE){
     if(pos > 0) --pos;
   } else
-    crt[pos++] = (c&0xff) | 0x0700;  // black on white
+    crt[pos++] = (MAKECGACOLOR(fgcolor, bgcolor) << 8) | (c&0xff);
   
   if((pos/80) >= 24){  // Scroll up.
     memmove(crt, crt+80, sizeof(crt[0])*23*80);
@@ -163,17 +164,67 @@ cgaputc(int c)
 void
 consputc(int c)
 {
+  static unsigned int current_fg = LIGHTGRAY;
+  static unsigned int current_bg = BLACK;
+  static char in_esc     = 0;
+  static char in_fgcolor = 0;
+  static char in_bgcolor = 0;
+
   if(panicked){
     cli();
     for(;;)
       ;
   }
 
+  // Hackish FSM for color state management
+  if (c==ANSI_COLOR_ESC0)
+  {
+    in_esc = 1;
+    return;
+  }
+  if (c==ANSI_COLOR_ESC1 && in_esc && !in_fgcolor && !in_bgcolor)
+  {
+    in_fgcolor = 1;
+    in_bgcolor = 0;
+    in_esc     = 0;
+    current_fg = 0;
+    return;
+  }
+  if (c==ANSI_COLOR_DELIM && (in_fgcolor || !in_bgcolor))
+  {
+    in_fgcolor = 0;
+    in_bgcolor = 1;
+    current_bg = 0;
+    return;
+  }
+  if (c==ANSI_COLOR_END && (in_fgcolor || in_bgcolor))
+  {
+    in_fgcolor = 0;
+    in_bgcolor = 0;
+    return;
+  }
+
+  if (in_fgcolor)
+  {
+    current_fg = current_fg*10 + (c-'0');
+    return;
+  }
+
+  if (in_bgcolor)
+  {
+    current_bg = current_bg*10 + (c-'0');
+    return;
+  }
+
+  in_esc     = 0;
+  in_fgcolor = 0;
+  in_bgcolor = 0;
+
   if(c == BACKSPACE){
     uartputc('\b'); uartputc(' '); uartputc('\b');
   } else
     uartputc(c);
-  cgaputc(c);
+  cgaputc(c, current_fg, current_bg);
 }
 
 #define INPUT_BUF 128
