@@ -23,7 +23,7 @@ LDFLAGS += -m elf_i386
 
 KERNEL_BOOT_OBJS = \
 	main.o           \
-	entry.o           \
+	entry.o          \
 
 all: $(KERNEL_BOOT_OBJS)
 
