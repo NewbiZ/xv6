@@ -1,7 +1,7 @@
-#include "../../include/types.h"
-#include "../../include/stat.h"
-#include "../../include/fcntl.h"
-#include "../../include/x86.h"
+#include <xv6/types.h>
+#include <xv6/stat.h>
+#include <xv6/fcntl.h>
+#include <xv6/x86.h>
 
 #include "ulibc.h"
 

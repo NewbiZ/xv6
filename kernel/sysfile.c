@@ -4,15 +4,17 @@
 // user code, and calls into file.c and fs.c.
 //
 
-#include <types.h>
-#include <defs.h>
-#include <param.h>
-#include <stat.h>
-#include <mmu.h>
-#include <proc.h>
-#include <fs.h>
-#include <file.h>
-#include <fcntl.h>
+#include <xv6/types.h>
+#include <xv6/defs.h>
+#include <xv6/param.h>
+#include <xv6/stat.h>
+#include <xv6/mmu.h>
+#include <xv6/proc.h>
+#include <xv6/fs.h>
+#include <xv6/file.h>
+#include <xv6/fcntl.h>
+#include <xv6/dirent.h>
+#include <xv6/stdio.h>
 
 // Fetch the nth word-sized system call argument as a file descriptor
 // and return both the descriptor and the corresponding struct file.
@@ -115,7 +117,7 @@ sys_fstat(void)
 int
 sys_link(void)
 {
-  char name[DIRSIZ], *new, *old;
+  char name[NAME_MAX], *new, *old;
   struct inode *dp, *ip;
 
   if(argstr(0, &old) < 0 || argstr(1, &new) < 0)
@@ -169,7 +171,7 @@ isdirempty(struct inode *dp)
   for(off=2*sizeof(de); off<dp->size; off+=sizeof(de)){
     if(readi(dp, (char*)&de, off, sizeof(de)) != sizeof(de))
       panic("isdirempty: readi");
-    if(de.inum != 0)
+    if(de.d_ino != 0)
       return 0;
   }
   return 1;
@@ -181,7 +183,7 @@ sys_unlink(void)
 {
   struct inode *ip, *dp;
   struct dirent de;
-  char name[DIRSIZ], *path;
+  char name[NAME_MAX], *path;
   uint off;
 
   if(argstr(0, &path) < 0)
@@ -236,7 +238,7 @@ create(char *path, short type, short major, short minor)
 {
   uint off;
   struct inode *ip, *dp;
-  char name[DIRSIZ];
+  char name[NAME_MAX];
 
   if((dp = nameiparent(path, name)) == 0)
     return 0;

@@ -1,5 +1,5 @@
-#include "../../include/types.h"
-#include "../../include/stat.h"
+#include <xv6/types.h>
+#include <xv6/stat.h>
 
 #include "ulibc.h"
 

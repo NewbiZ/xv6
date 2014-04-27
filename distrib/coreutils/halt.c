@@ -1,4 +1,4 @@
-#include "../../include/types.h"
+#include <xv6/types.h>
 
 #include "../ulibc/ulibc.h"
 

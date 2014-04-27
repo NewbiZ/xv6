@@ -1,8 +1,7 @@
 # Initial process execs /init.
 
-#include "syscall.h"
-#include "traps.h"
-
+#include <xv6/syscall.h>
+#include <xv6/traps.h>
 
 # exec(init, argv)
 .globl start

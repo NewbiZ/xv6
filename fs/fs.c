@@ -9,16 +9,18 @@
 // routines.  The (higher-level) system call implementations
 // are in sysfile.c.
 
-#include <types.h>
-#include <defs.h>
-#include <param.h>
-#include <stat.h>
-#include <mmu.h>
-#include <proc.h>
-#include <spinlock.h>
-#include <buf.h>
-#include <fs.h>
-#include <file.h>
+#include <xv6/types.h>
+#include <xv6/defs.h>
+#include <xv6/param.h>
+#include <xv6/stat.h>
+#include <xv6/mmu.h>
+#include <xv6/proc.h>
+#include <xv6/spinlock.h>
+#include <xv6/buf.h>
+#include <xv6/fs.h>
+#include <xv6/file.h>
+#include <xv6/dirent.h>
+#include <xv6/stdio.h>
 
 #define min(a, b) ((a) < (b) ? (a) : (b))
 static void itrunc(struct inode*);
@@ -497,7 +499,7 @@ writei(struct inode *ip, char *src, uint off, uint n)
 int
 namecmp(const char *s, const char *t)
 {
-  return strncmp(s, t, DIRSIZ);
+  return strncmp(s, t, NAME_MAX);
 }
 
 // Look for a directory entry in a directory.
@@ -514,13 +516,13 @@ dirlookup(struct inode *dp, char *name, uint *poff)
   for(off = 0; off < dp->size; off += sizeof(de)){
     if(readi(dp, (char*)&de, off, sizeof(de)) != sizeof(de))
       panic("dirlink read");
-    if(de.inum == 0)
+    if(de.d_ino == 0)
       continue;
-    if(namecmp(name, de.name) == 0){
+    if(namecmp(name, de.d_name) == 0){
       // entry matches path element
       if(poff)
         *poff = off;
-      inum = de.inum;
+      inum = de.d_ino;
       return iget(dp->dev, inum);
     }
   }
@@ -546,12 +548,12 @@ dirlink(struct inode *dp, char *name, uint inum)
   for(off = 0; off < dp->size; off += sizeof(de)){
     if(readi(dp, (char*)&de, off, sizeof(de)) != sizeof(de))
       panic("dirlink read");
-    if(de.inum == 0)
+    if(de.d_ino == 0)
       break;
   }
 
-  strncpy(de.name, name, DIRSIZ);
-  de.inum = inum;
+  strncpy(de.d_name, name, NAME_MAX);
+  de.d_ino = inum;
   if(writei(dp, (char*)&de, off, sizeof(de)) != sizeof(de))
     panic("dirlink");
   
@@ -587,8 +589,8 @@ skipelem(char *path, char *name)
   while(*path != '/' && *path != 0)
     path++;
   len = path - s;
-  if(len >= DIRSIZ)
-    memmove(name, s, DIRSIZ);
+  if(len >= NAME_MAX)
+    memmove(name, s, NAME_MAX);
   else {
     memmove(name, s, len);
     name[len] = 0;
@@ -600,7 +602,7 @@ skipelem(char *path, char *name)
 
 // Look up and return the inode for a path name.
 // If parent != 0, return the inode for the parent and copy the final
-// path element into name, which must have room for DIRSIZ bytes.
+// path element into name, which must have room for NAME_MAX bytes.
 static struct inode*
 namex(char *path, int nameiparent, char *name)
 {
@@ -639,7 +641,7 @@ namex(char *path, int nameiparent, char *name)
 struct inode*
 namei(char *path)
 {
-  char name[DIRSIZ];
+  char name[NAME_MAX];
   return namex(path, 0, name);
 }
 

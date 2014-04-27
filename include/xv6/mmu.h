@@ -46,7 +46,6 @@
 #define SEG_UDATA 5  // user data+stack
 #define SEG_TSS   6  // this process's task state
 
-//PAGEBREAK!
 #ifndef __ASSEMBLER__
 // Segment Descriptor
 struct segdesc {
@@ -188,7 +187,6 @@ struct taskstate {
   ushort iomb;       // I/O map base address
 };
 
-// PAGEBREAK: 12
 // Gate descriptors for interrupts and traps
 struct gatedesc {
   uint off_15_0 : 16;   // low 16 bits of offset in segment

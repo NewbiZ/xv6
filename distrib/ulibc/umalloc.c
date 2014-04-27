@@ -1,6 +1,6 @@
-#include "../../include/types.h"
-#include "../../include/stat.h"
-#include "../../include/param.h"
+#include <xv6/types.h>
+#include <xv6/stat.h>
+#include <xv6/param.h>
 
 #include "../ulibc/ulibc.h"
 

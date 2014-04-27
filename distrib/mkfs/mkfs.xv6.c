@@ -8,10 +8,12 @@
 #include <assert.h>
 
 #define stat xv6_stat  // avoid clash with host struct stat
-#include "../../include/types.h"
-#include "../../include/fs.h"
-#include "../../include/stat.h"
-#include "../../include/param.h"
+#include <xv6/types.h>
+#include <xv6/fs.h>
+#include <xv6/stat.h>
+#include <xv6/param.h>
+#include <xv6/dirent.h>
+#include <xv6/stdio.h>
 
 #define static_assert(a, b) do { switch (0) case 0: case (a): ; } while (0)
 
@@ -93,8 +95,11 @@ main(int argc, char *argv[])
   usedblocks = ninodes / IPB + 3 + bitblocks;
   freeblock = usedblocks;
 
-  printf("used %d (bit %d ninode %zu) free %u log %u total %d\n", usedblocks,
-         bitblocks, ninodes/IPB + 1, freeblock, nlog, nblocks+usedblocks+nlog);
+  if (0)
+  {
+    printf("used %d (bit %d ninode %zu) free %u log %u total %d\n", usedblocks,
+           bitblocks, ninodes/IPB + 1, freeblock, nlog, nblocks+usedblocks+nlog);
+  }
 
   assert(nblocks + usedblocks + nlog == size);
 
@@ -109,13 +114,13 @@ main(int argc, char *argv[])
   assert(rootino == ROOTINO);
 
   bzero(&de, sizeof(de));
-  de.inum = xshort(rootino);
-  strcpy(de.name, ".");
+  de.d_ino = xshort(rootino);
+  strcpy(de.d_name, ".");
   iappend(rootino, &de, sizeof(de));
 
   bzero(&de, sizeof(de));
-  de.inum = xshort(rootino);
-  strcpy(de.name, "..");
+  de.d_ino = xshort(rootino);
+  strcpy(de.d_name, "..");
   iappend(rootino, &de, sizeof(de));
 
   for(i = 2; i < argc; i++){
@@ -132,8 +137,8 @@ main(int argc, char *argv[])
     inum = ialloc(T_FILE);
 
     bzero(&de, sizeof(de));
-    de.inum = xshort(inum);
-    strncpy(de.name, basename, DIRSIZ);
+    de.d_ino = xshort(inum);
+    strncpy(de.d_name, basename, NAME_MAX);
     iappend(rootino, &de, sizeof(de));
 
     while((cc = read(fd, buf, sizeof(buf))) > 0)
@@ -233,13 +238,15 @@ balloc(int used)
   uchar buf[512];
   int i;
 
-  printf("balloc: first %d blocks have been allocated\n", used);
+  if (0)
+    printf("balloc: first %d blocks have been allocated\n", used);
   assert(used < 512*8);
   bzero(buf, 512);
   for(i = 0; i < used; i++){
     buf[i/8] = buf[i/8] | (0x1 << (i%8));
   }
-  printf("balloc: write bitmap block at sector %zu\n", ninodes/IPB + 3);
+  if (0)
+    printf("balloc: write bitmap block at sector %zu\n", ninodes/IPB + 3);
   wsect(ninodes / IPB + 3, buf);
 }
 

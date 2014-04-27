@@ -1,5 +1,5 @@
-#include "../../include/types.h"
-#include "../../include/fcntl.h"
+#include <xv6/types.h>
+#include <xv6/fcntl.h>
 
 #include "../ulibc/ulibc.h"
 

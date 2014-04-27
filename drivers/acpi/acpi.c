@@ -1,5 +1,5 @@
-#include <types.h>
-#include <defs.h>
+#include <xv6/types.h>
+#include <xv6/defs.h>
 
 #include "acpi.h"
 

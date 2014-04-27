@@ -1,1 +1,21 @@
-Unix v6 implementation in ANSI C
+Unix v6
+=======
+
+This is the reimplementation in ANSI C of Unix v6.
+
+Features
+--------
+
+* **Refactored build system**: the separation between userland and kernel is now clear. The complete userland distribution, along with its mkfs and coreutils is available in distrib/. The rest of the kernel uses recursive makefiles.
+* **vfs**: the filesystem layer is now abstract. Multiple filesystem support is now possible. Currently FAT32 and ext2 are in progress.
+* **ACPI support**: a limited set of ACPI commands are supported. Currently mainly shutdown/S5 mode.
+* **userland libc**: a simple and still in progress userland POSIX libc.
+* **POSIX compliance**: As for kernel support, users and signals are still missing, while some syscalls are already present. On the userland part, the libc and FHS are in progress.
+
+Authors
+-------
+* Aurelien Vallee <vallee.aurelien@gmail.com>
+
+Original implementation
+-----------------------
+Original xv6 vailable here: http://pdos.csail.mit.edu/6.828/2012/xv6.html

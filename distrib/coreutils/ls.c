@@ -1,13 +1,14 @@
-#include "../../include/types.h"
-#include "../../include/stat.h"
-#include "../../include/fs.h"
+#include <xv6/types.h>
+#include <xv6/stat.h>
+#include <xv6/dirent.h>
+#include <xv6/stdio.h>
 
 #include "../ulibc/ulibc.h"
 
 char*
 fmtname(char *path)
 {
-  static char buf[DIRSIZ+1];
+  static char buf[NAME_MAX+1];
   char *p;
   
   // Find first character after last slash.
@@ -16,10 +17,10 @@ fmtname(char *path)
   p++;
   
   // Return blank-padded name.
-  if(strlen(p) >= DIRSIZ)
+  if(strlen(p) >= NAME_MAX)
     return p;
   memmove(buf, p, strlen(p));
-  memset(buf+strlen(p), ' ', DIRSIZ-strlen(p));
+  memset(buf+strlen(p), ' ', NAME_MAX-strlen(p));
   return buf;
 }
 
@@ -48,7 +49,7 @@ ls(char *path)
     break;
   
   case T_DIR:
-    if(strlen(path) + 1 + DIRSIZ + 1 > sizeof buf){
+    if(strlen(path) + 1 + NAME_MAX + 1 > sizeof buf){
       printf(1, "ls: path too long\n");
       break;
     }
@@ -56,10 +57,10 @@ ls(char *path)
     p = buf+strlen(buf);
     *p++ = '/';
     while(read(fd, &de, sizeof(de)) == sizeof(de)){
-      if(de.inum == 0)
+      if(de.d_ino == 0)
         continue;
-      memmove(p, de.name, DIRSIZ);
-      p[DIRSIZ] = 0;
+      memmove(p, de.d_name, NAME_MAX);
+      p[NAME_MAX] = 0;
       if(stat(buf, &st) < 0){
         printf(1, "ls: cannot stat %s\n", buf);
         continue;
