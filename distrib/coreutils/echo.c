@@ -1,7 +1,7 @@
-#include <types.h>
-#include <stat.h>
+#include "../../include/types.h"
+#include "../../include/stat.h"
 
-#include <klibc.h>
+#include "../ulibc/ulibc.h"
 
 int
 main(int argc, char *argv[])

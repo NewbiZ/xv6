@@ -1,10 +1,8 @@
-// init: The initial user-level program
+#include "../../include/types.h"
+#include "../../include/stat.h"
+#include "../../include/fcntl.h"
 
-#include <types.h>
-#include <stat.h>
-#include <fcntl.h>
-
-#include <klibc.h>
+#include "../ulibc/ulibc.h"
 
 char *argv[] = { "sh", 0 };
 

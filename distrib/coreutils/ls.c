@@ -1,8 +1,8 @@
-#include <types.h>
-#include <stat.h>
-#include <fs.h>
+#include "../../include/types.h"
+#include "../../include/stat.h"
+#include "../../include/fs.h"
 
-#include <klibc.h>
+#include "../ulibc/ulibc.h"
 
 char*
 fmtname(char *path)

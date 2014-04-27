@@ -1,7 +1,7 @@
-#include <types.h>
-#include <fcntl.h>
+#include "../../include/types.h"
+#include "../../include/fcntl.h"
 
-#include <klibc.h>
+#include "../ulibc/ulibc.h"
 
 // Parsed command representation
 #define EXEC  1

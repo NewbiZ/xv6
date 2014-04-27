@@ -1,9 +1,9 @@
-#include <types.h>
-#include <stat.h>
-#include <fcntl.h>
-#include <x86.h>
+#include "../../include/types.h"
+#include "../../include/stat.h"
+#include "../../include/fcntl.h"
+#include "../../include/x86.h"
 
-#include <klibc.h>
+#include "ulibc.h"
 
 char*
 strcpy(char *s, char *t)

@@ -1,5 +1,6 @@
-#include <types.h>
-#include <klibc.h>
+#include "../../include/types.h"
+
+#include "../ulibc/ulibc.h"
 
 int
 main(int argc, char *argv[])

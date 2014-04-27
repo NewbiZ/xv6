@@ -8,10 +8,10 @@
 #include <assert.h>
 
 #define stat xv6_stat  // avoid clash with host struct stat
-#include "../include/types.h"
-#include "../include/fs.h"
-#include "../include/stat.h"
-#include "../include/param.h"
+#include "../../include/types.h"
+#include "../../include/fs.h"
+#include "../../include/stat.h"
+#include "../../include/param.h"
 
 #define static_assert(a, b) do { switch (0) case 0: case (a): ; } while (0)
 
@@ -68,7 +68,6 @@ main(int argc, char *argv[])
   char buf[512];
   struct dinode din;
 
-
   static_assert(sizeof(int) == 4, "Integers must be 4 bytes!");
 
   if(argc < 2){
@@ -120,26 +119,21 @@ main(int argc, char *argv[])
   iappend(rootino, &de, sizeof(de));
 
   for(i = 2; i < argc; i++){
-    assert(index(argv[i], '/') == 0);
-
     if((fd = open(argv[i], 0)) < 0){
       perror(argv[i]);
       exit(1);
     }
     
-    // Skip leading _ in name when writing to file system.
-    // The binaries are named _rm, _cat, etc. to keep the
-    // build operating system from trying to execute them
-    // in place of system binaries like rm and cat.
-    // Also skip the user/ prefix
-    if(argv[i][0] == '_')
-      ++argv[i];
+    const char* basename = argv[i] + strlen(argv[i]);
+    while (basename>=argv[i] && *basename!='/')
+      --basename;
+    ++basename;
 
     inum = ialloc(T_FILE);
 
     bzero(&de, sizeof(de));
     de.inum = xshort(inum);
-    strncpy(de.name, argv[i], DIRSIZ);
+    strncpy(de.name, basename, DIRSIZ);
     iappend(rootino, &de, sizeof(de));
 
     while((cc = read(fd, buf, sizeof(buf))) > 0)
