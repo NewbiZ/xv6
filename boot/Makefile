@@ -23,12 +23,17 @@ LDFLAGS += -m elf_i386
 
 KERNEL_BOOT_OBJS = \
 	main.o           \
+	entry.o           \
 
 all: $(KERNEL_BOOT_OBJS)
 
 %.o: %.c
 	@echo "[CC] [BOOT   ] $@"
 	@$(CC) $(CFLAGS) -c -o $@ $*.c
+
+%.o: %.S
+	@echo "[CC] [BOOT   ] $@"
+	@$(CC) $(CFLAGS) -c -o $@ $*.S
 
 clean:
 	$(RM) -rf *.o
