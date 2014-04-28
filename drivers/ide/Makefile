@@ -1,30 +1,16 @@
-CC = gcc
-AS = gas
-LD = ld
-CFLAGS =                       \
-	-fno-pic                     \
-	-static                      \
-	-fno-builtin                 \
-	-fno-strict-aliasing         \
-	-Wall                        \
-	-ggdb                        \
-	-m32                         \
-	-fno-omit-frame-pointer      \
-	-fno-stack-protector         \
-	-I$(shell pwd)/../../include \
-
-ASFLAGS =                   \
-	-m32                      \
-	-gdwarf-2                 \
-	-Wa,-divide               \
-	-I$(shell pwd)/../include \
-
-LDFLAGS += -m elf_i386
+top_srcdir = ../..
+include $(top_srcdir)/Makefile.common
 
 IDE_OBJS = \
 	ide.o    \
 
-all: $(IDE_OBJS)
+.PHONY: all clean
+
+all: kernel_driver_ide.o
+
+kernel_driver_ide.o: $(IDE_OBJS)
+	@echo "[LD] [DRIVERS] $@"
+	@$(LD) $(LDFLAGS) -r -o $@ $^
 
 %.o: %.c
 	@echo "[CC] [DRIVERS] $@"

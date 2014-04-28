@@ -1,31 +1,29 @@
-CC = gcc
-AS = gas
-LD = ld
-CFLAGS =                    \
-	-fno-pic                  \
-	-static                   \
-	-fno-builtin              \
-	-fno-strict-aliasing      \
-	-Wall                     \
-	-ggdb                     \
-	-m32                      \
-	-fno-omit-frame-pointer   \
-	-fno-stack-protector      \
-	-I$(shell pwd)/../include \
-
-ASFLAGS =                   \
-	-m32                      \
-	-gdwarf-2                 \
-	-Wa,-divide               \
-	-I$(shell pwd)/../include \
-
-LDFLAGS += -m elf_i386
+top_srcdir = ..
+include $(top_srcdir)/Makefile.common
 
 KERNEL_BOOT_OBJS = \
 	main.o           \
 	entry.o          \
 
-all: $(KERNEL_BOOT_OBJS)
+.PHONY: all clean
+
+all: kernel_boot.o entryother bootblock
+
+kernel_boot.o: $(KERNEL_BOOT_OBJS)
+	@echo "[LD] [BOOT   ] $@"
+	@$(LD) $(LDFLAGS) -r -o $@ $^
+
+entryother: entryother.S
+	@$(CC) $(CFLAGS) -fno-pic -nostdinc -I. -c entryother.S
+	@$(LD) $(LDFLAGS) -N -e start -Ttext 0x7000 -o bootblockother.o entryother.o
+	@$(OBJCOPY) -S -O binary -j .text bootblockother.o entryother > /dev/null 2>&1
+
+bootblock: bootasm.S bootmain.c
+	@$(CC) $(CFLAGS) -fno-pic -O -nostdinc -I. -c bootmain.c
+	@$(CC) $(CFLAGS) -fno-pic -nostdinc -I. -c bootasm.S
+	@$(LD) $(LDFLAGS) -N -e start -Ttext 0x7C00 -o bootblock.o bootasm.o bootmain.o
+	@$(OBJCOPY) -S -O binary -j .text bootblock.o bootblock > /dev/null 2>&1
+	@../tools/boot_sign.pl bootblock
 
 %.o: %.c
 	@echo "[CC] [BOOT   ] $@"
@@ -37,3 +35,5 @@ all: $(KERNEL_BOOT_OBJS)
 
 clean:
 	$(RM) -rf *.o
+	$(RM) -rf entryother
+	$(RM) -rf bootblock

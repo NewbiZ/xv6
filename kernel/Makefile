@@ -1,25 +1,5 @@
-CC = gcc
-AS = gas
-LD = ld
-CFLAGS =                    \
-	-fno-pic                  \
-	-static                   \
-	-fno-builtin              \
-	-fno-strict-aliasing      \
-	-Wall                     \
-	-ggdb                     \
-	-m32                      \
-	-fno-omit-frame-pointer   \
-	-fno-stack-protector      \
-	-I$(shell pwd)/../include \
-
-ASFLAGS =                   \
-	-m32                      \
-	-gdwarf-2                 \
-	-Wa,-divide               \
-	-I$(shell pwd)/../include \
-
-LDFLAGS += -m elf_i386
+top_srcdir = ..
+include $(top_srcdir)/Makefile.common
 
 KERNEL_OBJS = \
 	console.o   \
@@ -43,7 +23,18 @@ KERNEL_OBJS = \
 	string.o    \
 	lapic.o     \
 
-all: $(KERNEL_OBJS)
+.PHONY: all clean
+
+all: kernel.o initcode
+
+kernel.o: $(KERNEL_OBJS)
+	@echo "[LD] [KERNEL ] $@"
+	@$(LD) $(LDFLAGS) -r -o $@ $^
+
+initcode: initcode.S
+	@$(CC) $(CFLAGS) -nostdinc -I. -c initcode.S
+	@$(LD) $(LDFLAGS) -N -e start -Ttext 0 -o initcode.out initcode.o
+	@$(OBJCOPY) -S -O binary initcode.out initcode > /dev/null 2>&1
 
 %.o: %.c
 	@echo "[CC] [KERNEL ] $@"
@@ -55,3 +46,4 @@ all: $(KERNEL_OBJS)
 
 clean:
 	$(RM) -rf *.o
+	$(RM) -rf initcode initcode.out
