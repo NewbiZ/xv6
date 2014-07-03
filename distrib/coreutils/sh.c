@@ -14,24 +14,6 @@
 
 #define MAXARGS 10
 
-char*
-ngets(char *buf, int max)
-{
-  int i, cc;
-  char c;
-
-  for(i=0; i+1 < max; ){
-    cc = read(0, &c, 1);
-    if(cc < 1)
-      break;
-    buf[i++] = c;
-    if(c == '\n' || c == '\r')
-      break;
-  }
-  buf[i] = '\0';
-  return buf;
-}
-
 struct cmd {
   int type;
 };
@@ -154,7 +136,7 @@ getcmd(char *buf, int nbuf)
 {
   __ulibc_printf(2, "$ ");
   __ulibc_memset(buf, 0, nbuf);
-  ngets(buf, nbuf);
+  __ulibc_gets(buf, nbuf);
   if(buf[0] == 0) // EOF
     return -1;
   return 0;

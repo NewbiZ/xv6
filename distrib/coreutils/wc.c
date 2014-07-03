@@ -17,7 +17,7 @@ wc(int fd, char *name)
       c++;
       if(buf[i] == '\n')
         l++;
-      if(strchr(" \r\t\n\v", buf[i]))
+      if(__ulibc_strchr(" \r\t\n\v", buf[i]))
         inword = 0;
       else if(!inword){
         w++;

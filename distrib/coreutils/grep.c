@@ -15,7 +15,7 @@ grep(char *pattern, int fd)
   while((n = read(fd, buf+m, sizeof(buf)-m)) > 0){
     m += n;
     p = buf;
-    while((q = strchr(p, '\n')) != 0){
+    while((q = __ulibc_strchr(p, '\n')) != 0){
       *q = 0;
       if(match(pattern, p)){
         *q = '\n';
@@ -27,7 +27,7 @@ grep(char *pattern, int fd)
       m = 0;
     if(m > 0){
       m -= p - buf;
-      memmove(buf, p, m);
+      __ulibc_memmove(buf, p, m);
     }
   }
 }
