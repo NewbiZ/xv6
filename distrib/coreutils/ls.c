@@ -1,25 +1,11 @@
 #include <ulibc/ulibc.h>
-#include <ulibc/stdio.h>
-#include <ulibc/string.h>
+//#include <ulibc/stdio.h>
+//#include <ulibc/string.h>
 
 #include <xv6/stdio.h>
 #include <xv6/dirent.h>
 #include <xv6/stat.h>
 #include <xv6/fcntl.h>
-
-int
-stat(char *n, struct stat *st)
-{
-  int fd;
-  int r;
-
-  fd = open(n, O_RDONLY);
-  if(fd < 0)
-    return -1;
-  r = fstat(fd, st);
-  close(fd);
-  return r;
-}
 
 char*
 fmtname(char *path)
@@ -28,15 +14,15 @@ fmtname(char *path)
   char *p;
   
   // Find first character after last slash.
-  for(p=path+strlen(path); p >= path && *p != '/'; p--)
+  for(p=path+__ulibc_strlen(path); p >= path && *p != '/'; p--)
     ;
   p++;
   
   // Return blank-padded name.
-  if(strlen(p) >= NAME_MAX)
+  if(__ulibc_strlen(p) >= NAME_MAX)
     return p;
-  memmove(buf, p, strlen(p));
-  memset(buf+strlen(p), ' ', NAME_MAX-strlen(p));
+  __ulibc_memmove(buf, p, __ulibc_strlen(p));
+  __ulibc_memset(buf+__ulibc_strlen(p), ' ', NAME_MAX-__ulibc_strlen(p));
   return buf;
 }
 
@@ -49,39 +35,39 @@ ls(char *path)
   struct stat st;
   
   if((fd = open(path, 0)) < 0){
-    fprintf(stderr, "ls: cannot open %s\n", path);
+    __ulibc_printf(2, "ls: cannot open %s\n", path);
     return;
   }
   
   if(fstat(fd, &st) < 0){
-    fprintf(stderr, "ls: cannot stat %s\n", path);
+    __ulibc_printf(2, "ls: cannot stat %s\n", path);
     close(fd);
     return;
   }
   
   switch(st.type){
   case T_FILE:
-    fprintf(stdout, "%s %d %d %d\n", fmtname(path), st.type, st.ino, st.size);
+    __ulibc_printf(1, "%s %d %d %d\n", fmtname(path), st.type, st.ino, st.size);
     break;
   
   case T_DIR:
-    if(strlen(path) + 1 + NAME_MAX + 1 > sizeof buf){
-      fprintf(stderr, "ls: path too long\n");
+    if(__ulibc_strlen(path) + 1 + NAME_MAX + 1 > sizeof buf){
+      __ulibc_printf(2, "ls: path too long\n");
       break;
     }
-    strcpy(buf, path);
-    p = buf+strlen(buf);
+    __ulibc_strcpy(buf, path);
+    p = buf+__ulibc_strlen(buf);
     *p++ = '/';
     while(read(fd, &de, sizeof(de)) == sizeof(de)){
       if(de.d_ino == 0)
         continue;
-      memmove(p, de.d_name, NAME_MAX);
+      __ulibc_memmove(p, de.d_name, NAME_MAX);
       p[NAME_MAX] = 0;
-      if(stat(buf, &st) < 0){
-        fprintf(stderr, "ls: cannot stat %s\n", buf);
+      if(__ulibc_stat(buf, &st) < 0){
+        __ulibc_printf(2, "ls: cannot stat %s\n", buf);
         continue;
       }
-      fprintf(stdout, "%s %d %d %d\n", fmtname(buf), st.type, st.ino, st.size);
+      __ulibc_printf(1, "%s %d %d %d\n", fmtname(buf), st.type, st.ino, st.size);
     }
     break;
   }

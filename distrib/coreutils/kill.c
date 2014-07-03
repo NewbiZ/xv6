@@ -8,7 +8,7 @@ main(int argc, char **argv)
   int i;
 
   if(argc < 1){
-    fprintf(stderr, "usage: kill pid...\n");
+    __ulibc_printf(2, "usage: kill pid...\n");
     sysexit();
   }
   for(i=1; i<argc; i++)

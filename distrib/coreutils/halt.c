@@ -5,7 +5,7 @@ int
 main(int argc, char *argv[])
 {
   if (halt() < 0)
-    fprintf(stderr, "failed to halt");
+    __ulibc_printf(2, "failed to halt");
   sysexit();
 }
 

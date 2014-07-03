@@ -29,9 +29,9 @@ DISTRIB_ULIBC =   \
 	ulibc/string.o  \
 	ulibc/time.o    \
 	ulibc/usys.o    \
-#	ulibc/printf.o  \
-#	ulibc/ulib.o    \
-#	ulibc/umalloc.o \
+	ulibc/printf.o  \
+	ulibc/ulib.o    \
+	ulibc/umalloc.o \
 
 .PHONY: all motd
 .PRECIOUS: coreutils/%.o ulibc/%.o

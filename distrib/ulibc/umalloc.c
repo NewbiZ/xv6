@@ -23,7 +23,7 @@ static Header base;
 static Header *freep;
 
 void
-free(void *ap)
+__ulibc_free(void *ap)
 {
   Header *bp, *p;
 
@@ -57,12 +57,12 @@ morecore(uint nu)
     return 0;
   hp = (Header*)p;
   hp->s.size = nu;
-  free((void*)(hp + 1));
+  __ulibc_free((void*)(hp + 1));
   return freep;
 }
 
 void*
-malloc(uint nbytes)
+__ulibc_malloc(uint nbytes)
 {
   Header *p, *prevp;
   uint nunits;
@@ -89,3 +89,4 @@ malloc(uint nbytes)
         return 0;
   }
 }
+

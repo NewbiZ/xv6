@@ -25,18 +25,15 @@ int uptime(void);
 int getcwd(char* buf, int size);
 int halt(void);
 
-// klib.c
-/*
-int stat(char*, struct stat*);
-char* strcpy(char*, char*);
-void *memmove(void*, void*, int);
-char* strchr(const char*, char c);
-int strcmp(const char*, const char*);
-void printf(int, char*, ...);
-char* gets(char*, int max);
-unsigned int strlen(char*);
-void* memset(void*, int, unsigned int);
-void* malloc(unsigned int);
-void free(void*);
-int atoi(const char*);
-*/
+void         __ulibc_printf(int, char*, ...);
+void*        __ulibc_memset(void*, int, unsigned int);
+void*        __ulibc_malloc(unsigned int);
+char*        __ulibc_strchr(const char*, char c);
+unsigned int __ulibc_strlen(char*);
+int          __ulibc_stat(char*, struct stat*);
+char*        __ulibc_strcpy(char*, char*);
+void*        __ulibc_memmove(void*, void*, int);
+int          __ulibc_strcmp(const char*, const char*);
+char*        __ulibc_gets(char*, int max);
+void         __ulibc_free(void*);
+int          __ulibc_atoi(const char*);

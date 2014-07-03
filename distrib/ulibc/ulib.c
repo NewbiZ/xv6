@@ -4,7 +4,7 @@
 #include <../../include/xv6/x86.h>
 
 char*
-strcpy(char *s, char *t)
+__ulibc_strcpy(char *s, char *t)
 {
   char *os;
 
@@ -15,7 +15,7 @@ strcpy(char *s, char *t)
 }
 
 int
-strcmp(const char *p, const char *q)
+__ulibc_strcmp(const char *p, const char *q)
 {
   while(*p && *p == *q)
     p++, q++;
@@ -23,7 +23,7 @@ strcmp(const char *p, const char *q)
 }
 
 unsigned int
-strlen(char *s)
+__ulibc_strlen(char *s)
 {
   int n;
 
@@ -33,14 +33,14 @@ strlen(char *s)
 }
 
 void*
-memset(void *dst, int c, unsigned int n)
+__ulibc_memset(void *dst, int c, unsigned int n)
 {
   stosb(dst, c, n);
   return dst;
 }
 
 char*
-strchr(const char *s, char c)
+__ulibc_strchr(const char *s, char c)
 {
   for(; *s; s++)
     if(*s == c)
@@ -49,7 +49,7 @@ strchr(const char *s, char c)
 }
 
 char*
-gets(char *buf, int max)
+__ulibc_gets(char *buf, int max)
 {
   int i, cc;
   char c;
@@ -67,7 +67,7 @@ gets(char *buf, int max)
 }
 
 int
-stat(char *n, struct stat *st)
+__ulibc_stat(char *n, struct stat *st)
 {
   int fd;
   int r;
@@ -81,7 +81,7 @@ stat(char *n, struct stat *st)
 }
 
 int
-atoi(const char *s)
+__ulibc_atoi(const char *s)
 {
   int n;
 
@@ -92,7 +92,7 @@ atoi(const char *s)
 }
 
 void*
-memmove(void *vdst, void *vsrc, int n)
+__ulibc_memmove(void *vdst, void *vsrc, int n)
 {
   char *dst, *src;
   

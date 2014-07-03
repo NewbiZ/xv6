@@ -18,18 +18,18 @@ main(void)
   dup(0);  // stderr
 
   for(;;){
-    fprintf(stdout, "init: starting sh\n");
+    __ulibc_printf(1, "init: starting sh\n");
     pid = fork();
     if(pid < 0){
-      fprintf(stdout, "init: fork failed\n");
+      __ulibc_printf(1, "init: fork failed\n");
       sysexit();
     }
     if(pid == 0){
       exec("sh", argv);
-      fprintf(stdout, "init: exec sh failed\n");
+      __ulibc_printf(1, "init: exec sh failed\n");
       sysexit();
     }
     while((wpid=wait()) >= 0 && wpid != pid)
-      fprintf(stdout, "zombie!\n");
+      __ulibc_printf(1, "zombie!\n");
   }
 }

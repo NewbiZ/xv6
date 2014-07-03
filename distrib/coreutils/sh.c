@@ -1,7 +1,7 @@
 #include <ulibc/ulibc.h>
-#include <ulibc/stdio.h>
-#include <ulibc/string.h>
-#include <ulibc/stdlib.h>
+//#include <ulibc/stdio.h>
+//#include <ulibc/string.h>
+//#include <ulibc/stdlib.h>
 
 #include <xv6/fcntl.h>
 
@@ -95,14 +95,14 @@ runcmd(struct cmd *cmd)
     if(ecmd->argv[0] == 0)
       sysexit();
     exec(ecmd->argv[0], ecmd->argv);
-    fprintf(stderr, "exec %s failed\n", ecmd->argv[0]);
+    __ulibc_printf(2, "exec %s failed\n", ecmd->argv[0]);
     break;
 
   case REDIR:
     rcmd = (struct redircmd*)cmd;
     close(rcmd->fd);
     if(open(rcmd->file, rcmd->mode) < 0){
-      fprintf(stderr, "open %s failed\n", rcmd->file);
+      __ulibc_printf(2, "open %s failed\n", rcmd->file);
       sysexit();
     }
     runcmd(rcmd->cmd);
@@ -152,8 +152,8 @@ runcmd(struct cmd *cmd)
 int
 getcmd(char *buf, int nbuf)
 {
-  fprintf(stderr, "$ ");
-  memset(buf, 0, nbuf);
+  __ulibc_printf(2, "$ ");
+  __ulibc_memset(buf, 0, nbuf);
   ngets(buf, nbuf);
   if(buf[0] == 0) // EOF
     return -1;
@@ -182,16 +182,16 @@ main(void)
     if (buf[0] == 'c' && buf[1] == 'd' && buf[2] == ' '){
       // Clumsy but will have to do for now.
       // Chdir has no effect on the parent if run in the child.
-      buf[strlen(buf)-1] = 0;  // chop \n
+      buf[__ulibc_strlen(buf)-1] = 0;  // chop \n
       if(chdir(buf+3) < 0)
-        fprintf(stderr, "cannot cd %s\n", buf+3);
+        __ulibc_printf(2, "cannot cd %s\n", buf+3);
       continue;
     }
     // $ pwd
     if (buf[0] == 'p' && buf[1] == 'w' && buf[2] == 'd' && buf[3] == '\n'){
         if (getcwd(cwd, sizeof(cwd)) < 0)
           panic("cannot retrieve cwd");
-        fprintf(stderr, "cwd: %s\n", cwd);
+        __ulibc_printf(2, "cwd: %s\n", cwd);
         continue;
     }
     // $ <everything else>
@@ -205,7 +205,7 @@ main(void)
 void
 panic(char *s)
 {
-  fprintf(stderr, "%s\n", s);
+  __ulibc_printf(2, "%s\n", s);
   sysexit();
 }
 
@@ -228,8 +228,8 @@ execcmd(void)
 {
   struct execcmd *cmd;
 
-  cmd = malloc(sizeof(*cmd));
-  memset(cmd, 0, sizeof(*cmd));
+  cmd = __ulibc_malloc(sizeof(*cmd));
+  __ulibc_memset(cmd, 0, sizeof(*cmd));
   cmd->type = EXEC;
   return (struct cmd*)cmd;
 }
@@ -239,8 +239,8 @@ redircmd(struct cmd *subcmd, char *file, char *efile, int mode, int fd)
 {
   struct redircmd *cmd;
 
-  cmd = malloc(sizeof(*cmd));
-  memset(cmd, 0, sizeof(*cmd));
+  cmd = __ulibc_malloc(sizeof(*cmd));
+  __ulibc_memset(cmd, 0, sizeof(*cmd));
   cmd->type = REDIR;
   cmd->cmd = subcmd;
   cmd->file = file;
@@ -255,8 +255,8 @@ pipecmd(struct cmd *left, struct cmd *right)
 {
   struct pipecmd *cmd;
 
-  cmd = malloc(sizeof(*cmd));
-  memset(cmd, 0, sizeof(*cmd));
+  cmd = __ulibc_malloc(sizeof(*cmd));
+  __ulibc_memset(cmd, 0, sizeof(*cmd));
   cmd->type = PIPE;
   cmd->left = left;
   cmd->right = right;
@@ -268,8 +268,8 @@ listcmd(struct cmd *left, struct cmd *right)
 {
   struct listcmd *cmd;
 
-  cmd = malloc(sizeof(*cmd));
-  memset(cmd, 0, sizeof(*cmd));
+  cmd = __ulibc_malloc(sizeof(*cmd));
+  __ulibc_memset(cmd, 0, sizeof(*cmd));
   cmd->type = LIST;
   cmd->left = left;
   cmd->right = right;
@@ -281,8 +281,8 @@ backcmd(struct cmd *subcmd)
 {
   struct backcmd *cmd;
 
-  cmd = malloc(sizeof(*cmd));
-  memset(cmd, 0, sizeof(*cmd));
+  cmd = __ulibc_malloc(sizeof(*cmd));
+  __ulibc_memset(cmd, 0, sizeof(*cmd));
   cmd->type = BACK;
   cmd->cmd = subcmd;
   return (struct cmd*)cmd;
@@ -300,7 +300,7 @@ gettoken(char **ps, char *es, char **q, char **eq)
   int ret;
   
   s = *ps;
-  while(s < es && strchr(whitespace, *s))
+  while(s < es && __ulibc_strchr(whitespace, *s))
     s++;
   if(q)
     *q = s;
@@ -325,14 +325,14 @@ gettoken(char **ps, char *es, char **q, char **eq)
     break;
   default:
     ret = 'a';
-    while(s < es && !strchr(whitespace, *s) && !strchr(symbols, *s))
+    while(s < es && !__ulibc_strchr(whitespace, *s) && !__ulibc_strchr(symbols, *s))
       s++;
     break;
   }
   if(eq)
     *eq = s;
   
-  while(s < es && strchr(whitespace, *s))
+  while(s < es && __ulibc_strchr(whitespace, *s))
     s++;
   *ps = s;
   return ret;
@@ -344,10 +344,10 @@ peek(char **ps, char *es, char *toks)
   char *s;
   
   s = *ps;
-  while(s < es && strchr(whitespace, *s))
+  while(s < es && __ulibc_strchr(whitespace, *s))
     s++;
   *ps = s;
-  return *s && strchr(toks, *s);
+  return *s && __ulibc_strchr(toks, *s);
 }
 
 struct cmd *parseline(char**, char*);
@@ -361,11 +361,11 @@ parsecmd(char *s)
   char *es;
   struct cmd *cmd;
 
-  es = s + strlen(s);
+  es = s + __ulibc_strlen(s);
   cmd = parseline(&s, es);
   peek(&s, es, "");
   if(s != es){
-    fprintf(stderr, "leftovers: %s\n", s);
+    __ulibc_printf(2, "leftovers: %s\n", s);
     panic("syntax");
   }
   nulterminate(cmd);
@@ -450,7 +450,7 @@ parseexec(char **ps, char *es)
   int tok, argc;
   struct execcmd *cmd;
   struct cmd *ret;
-  
+
   if(peek(ps, es, "("))
     return parseblock(ps, es);
 
