@@ -1,14 +1,15 @@
-#include <xv6/types.h>
-#include <xv6/stat.h>
-
-#include "../ulibc/ulibc.h"
+#include <ulibc/ulibc.h>
+#include <ulibc/stdio.h>
+#include <ulibc/assert.h>
 
 int
 main(int argc, char *argv[])
 {
+  assert(1+1==2);
+  
   int i;
 
   for(i = 1; i < argc; i++)
-    printf(1, "%s%s", argv[i], i+1 < argc ? " " : "\n");
-  exit();
+    fprintf(stdout, "%s%s", argv[i], i+1 < argc ? " " : "\n");
+  sysexit();
 }

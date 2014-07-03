@@ -1,5 +1,6 @@
-top_srcdir = ..
-include $(top_srcdir)/Makefile.common
+TOP_SRCDIR = ..
+COMPONENT = "DRIVERS"
+include $(TOP_SRCDIR)/Makefile.common
 
 .PHONY: all clean
 
@@ -12,18 +13,17 @@ KERNEL_DRIVERS_OBJS =               \
 	ide/kernel_driver_ide.o           \
 
 kernel_drivers.o: $(KERNEL_DRIVERS_OBJS)
-	@echo "[LD] [DRIVERS] $@"
-	@$(LD) $(LDFLAGS) -r -o $@ $^
+	$(LOG_LD) $(LD) $(LDFLAGS) -r -o $@ $^
 
 $(KERNEL_DRIVERS_OBJS):
-	@$(MAKE) -sC acpi
-	@$(MAKE) -sC serial
-	@$(MAKE) -sC keyboard
-	@$(MAKE) -sC ide
+	$(LOG_MAKE) -C acpi
+	$(LOG_MAKE) -C serial
+	$(LOG_MAKE) -C keyboard
+	$(LOG_MAKE) -C ide
 
 clean:
-	$(MAKE) -sC acpi clean
-	$(MAKE) -sC serial clean
-	$(MAKE) -sC keyboard clean
-	$(MAKE) -sC ide clean
-	$(RM) -rf kernel_drivers.o
+	$(LOG_MAKE) -C acpi clean
+	$(LOG_MAKE) -C serial clean
+	$(LOG_MAKE) -C keyboard clean
+	$(LOG_MAKE) -C ide clean
+	$(LOG_CMD) $(RM) -rf kernel_drivers.o

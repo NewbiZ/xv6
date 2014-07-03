@@ -6,11 +6,11 @@ This is the reimplementation in ANSI C of Unix v6.
 Features
 --------
 
-* **Refactored build system**: the separation between userland and kernel is now clear. The complete userland distribution, along with its mkfs and coreutils is available in distrib/. The rest of the kernel uses recursive makefiles.
+* **Refactored build system**: the separation between distribution and kernel is now clear. The complete distribution, (SUS-1 compliant) is available in distrib/. The rest of the kernel uses recursive makefiles.
 * **vfs**: the filesystem layer is now abstract. Multiple filesystem support is now possible. Currently FAT32 and ext2 are in progress.
 * **ACPI support**: a limited set of ACPI commands are supported. Currently mainly shutdown/S5 mode.
-* **userland libc**: a simple and still in progress userland POSIX libc.
-* **POSIX compliance**: As for kernel support, users and signals are still missing, while some syscalls are already present. On the userland part, the libc and FHS are in progress.
+* **userland libc**: C89/ANSI compliant + POSIX-1 compliant
+* **SUS-1 compliance**: As for kernel support, users and signals are still missing for POSIX-1 support, while some syscalls are already present. On the userland part, the libc and FHS are in progress. Update: libc almost finished.
 
 Authors
 -------

@@ -1,16 +1,14 @@
-#include <xv6/types.h>
-#include <xv6/stat.h>
-
-#include "../ulibc/ulibc.h"
+#include <ulibc/ulibc.h>
+#include <ulibc/stdio.h>
 
 int
 main(int argc, char *argv[])
 {
   if(argc != 3){
-    printf(2, "Usage: ln old new\n");
-    exit();
+    fprintf(stderr, "Usage: ln old new\n");
+    sysexit();
   }
   if(link(argv[1], argv[2]) < 0)
-    printf(2, "link %s %s: failed\n", argv[1], argv[2]);
-  exit();
+    fprintf(stderr, "link %s %s: failed\n", argv[1], argv[2]);
+  sysexit();
 }

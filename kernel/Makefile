@@ -1,5 +1,6 @@
-top_srcdir = ..
-include $(top_srcdir)/Makefile.common
+TOP_SRCDIR = ..
+COMPONENT = KERNEL 
+include $(TOP_SRCDIR)/Makefile.common
 
 KERNEL_OBJS = \
 	console.o   \
@@ -28,22 +29,19 @@ KERNEL_OBJS = \
 all: kernel.o initcode
 
 kernel.o: $(KERNEL_OBJS)
-	@echo "[LD] [KERNEL ] $@"
-	@$(LD) $(LDFLAGS) -r -o $@ $^
+	$(LOG_LD) $(LD) $(LDFLAGS) -r -o $@ $^
 
 initcode: initcode.S
-	@$(CC) $(CFLAGS) -nostdinc -I. -c initcode.S
-	@$(LD) $(LDFLAGS) -N -e start -Ttext 0 -o initcode.out initcode.o
-	@$(OBJCOPY) -S -O binary initcode.out initcode > /dev/null 2>&1
+	$(LOG_CC) $(CC) $(CFLAGS) -nostdinc -I. -c initcode.S
+	$(LOG_LD) $(LD) $(LDFLAGS) -N -e start -Ttext 0 -o initcode.out initcode.o
+	$(LOG_CMD) $(OBJCOPY) -S -O binary initcode.out initcode > /dev/null 2>&1
 
 %.o: %.c
-	@echo "[CC] [KERNEL ] $@"
-	@$(CC) $(CFLAGS) -c -o $@ $*.c
+	$(LOG_CC) $(CC) $(CFLAGS) -c -o $@ $*.c
 
 %.o: %.S
-	@echo "[CC] [KERNEL ] $@"
-	@$(CC) $(ASFLAGS) -c -o $@ $*.S
+	$(LOG_CC) $(CC) $(ASFLAGS) -c -o $@ $*.S
 
 clean:
-	$(RM) -rf *.o
-	$(RM) -rf initcode initcode.out
+	$(LOG_CMD) $(RM) -rf *.o
+	$(LOG_CMD) $(RM) -rf initcode initcode.out

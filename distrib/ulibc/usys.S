@@ -1,5 +1,5 @@
-#include <xv6/syscall.h>
-#include <xv6/traps.h>
+#include <../../include/xv6/syscall.h>
+#include <../../include/xv6/traps.h>
 
 #define SYSCALL(name) \
   .globl name; \
@@ -8,8 +8,14 @@
     int $T_SYSCALL; \
     ret
 
+.globl sysexit;
+sysexit:
+  movl $SYS_exit, %eax;
+  int $T_SYSCALL;
+  ret
+
 SYSCALL(fork)
-SYSCALL(exit)
+//SYSCALL(exit)
 SYSCALL(wait)
 SYSCALL(pipe)
 SYSCALL(read)

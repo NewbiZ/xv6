@@ -1,7 +1,6 @@
-#include <xv6/types.h>
-#include <xv6/stat.h>
-
-#include "../ulibc/ulibc.h"
+#include <ulibc/ulibc.h>
+#include <ulibc/string.h>
+#include <ulibc/stdio.h>
 
 char buf[1024];
 int match(char*, char*);
@@ -40,25 +39,25 @@ main(int argc, char *argv[])
   char *pattern;
   
   if(argc <= 1){
-    printf(2, "usage: grep pattern [file ...]\n");
-    exit();
+    fprintf(stderr, "usage: grep pattern [file ...]\n");
+    sysexit();
   }
   pattern = argv[1];
   
   if(argc <= 2){
     grep(pattern, 0);
-    exit();
+    sysexit();
   }
 
   for(i = 2; i < argc; i++){
     if((fd = open(argv[i], 0)) < 0){
-      printf(1, "grep: cannot open %s\n", argv[i]);
-      exit();
+      fprintf(stdout, "grep: cannot open %s\n", argv[i]);
+      sysexit();
     }
     grep(pattern, fd);
     close(fd);
   }
-  exit();
+  sysexit();
 }
 
 // Regexp matcher from Kernighan & Pike,

@@ -1,8 +1,7 @@
-#include <xv6/types.h>
-#include <xv6/stat.h>
-#include <xv6/fcntl.h>
+#include <ulibc/ulibc.h>
+#include <ulibc/stdio.h>
 
-#include "../ulibc/ulibc.h"
+#include <xv6/fcntl.h>
 
 char *argv[] = { "sh", 0 };
 
@@ -19,18 +18,18 @@ main(void)
   dup(0);  // stderr
 
   for(;;){
-    printf(1, "init: starting sh\n");
+    fprintf(stdout, "init: starting sh\n");
     pid = fork();
     if(pid < 0){
-      printf(1, "init: fork failed\n");
-      exit();
+      fprintf(stdout, "init: fork failed\n");
+      sysexit();
     }
     if(pid == 0){
       exec("sh", argv);
-      printf(1, "init: exec sh failed\n");
-      exit();
+      fprintf(stdout, "init: exec sh failed\n");
+      sysexit();
     }
     while((wpid=wait()) >= 0 && wpid != pid)
-      printf(1, "zombie!\n");
+      fprintf(stdout, "zombie!\n");
   }
 }

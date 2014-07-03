@@ -46,23 +46,26 @@ RM = rm
 
 CHMOD = chmod
 
-CFLAGS =                  \
-	-fno-pic                \
-	-static                 \
-	-fno-builtin            \
-	-fno-strict-aliasing    \
-	-Wall                   \
-	-ggdb                   \
-	-m32                    \
-	-fno-omit-frame-pointer \
-	-fno-stack-protector    \
-	-I$(TOP_SRCDIR)/include \
+ASFLAGS =                   \
+	-m32                      \
+	-gdwarf-2                 \
+	-Wa,-divide               \
+	-I$(TOP_SRCDIR)/include   \
 
-ASFLAGS =                 \
-	-m32                    \
-	-gdwarf-2               \
-	-Wa,-divide             \
-	-I$(TOP_SRCDIR)/include \
+CFLAGS =                    \
+	-fno-pic                  \
+	-static                   \
+	-fno-builtin              \
+	-fno-strict-aliasing      \
+	-Wall                     \
+	-ggdb                     \
+	-m32                      \
+	-fno-omit-frame-pointer   \
+	-fno-stack-protector      \
+	-fno-pic                  \
+	-nostdinc                 \
+	-I$(TOP_SRCDIR)/include   \
+	-I$(TOP_SRCDIR)/../include\
 
 LDFLAGS =     \
   -m elf_i386 \

@@ -1,7 +1,7 @@
-#include <xv6/types.h>
-#include <xv6/stat.h>
+#include <../../include/xv6/types.h>
+#include <../../include/xv6/stat.h>
 
-#include "ulibc.h"
+#include <ulibc/ulibc.h>
 
 static void
 putc(int fd, char c)

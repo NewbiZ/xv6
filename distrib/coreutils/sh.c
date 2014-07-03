@@ -1,7 +1,9 @@
-#include <xv6/types.h>
-#include <xv6/fcntl.h>
+#include <ulibc/ulibc.h>
+#include <ulibc/stdio.h>
+#include <ulibc/string.h>
+#include <ulibc/stdlib.h>
 
-#include "../ulibc/ulibc.h"
+#include <xv6/fcntl.h>
 
 // Parsed command representation
 #define EXEC  1
@@ -11,6 +13,24 @@
 #define BACK  5
 
 #define MAXARGS 10
+
+char*
+ngets(char *buf, int max)
+{
+  int i, cc;
+  char c;
+
+  for(i=0; i+1 < max; ){
+    cc = read(0, &c, 1);
+    if(cc < 1)
+      break;
+    buf[i++] = c;
+    if(c == '\n' || c == '\r')
+      break;
+  }
+  buf[i] = '\0';
+  return buf;
+}
 
 struct cmd {
   int type;
@@ -64,7 +84,7 @@ runcmd(struct cmd *cmd)
   struct redircmd *rcmd;
 
   if(cmd == 0)
-    exit();
+    sysexit();
   
   switch(cmd->type){
   default:
@@ -73,17 +93,17 @@ runcmd(struct cmd *cmd)
   case EXEC:
     ecmd = (struct execcmd*)cmd;
     if(ecmd->argv[0] == 0)
-      exit();
+      sysexit();
     exec(ecmd->argv[0], ecmd->argv);
-    printf(2, "exec %s failed\n", ecmd->argv[0]);
+    fprintf(stderr, "exec %s failed\n", ecmd->argv[0]);
     break;
 
   case REDIR:
     rcmd = (struct redircmd*)cmd;
     close(rcmd->fd);
     if(open(rcmd->file, rcmd->mode) < 0){
-      printf(2, "open %s failed\n", rcmd->file);
-      exit();
+      fprintf(stderr, "open %s failed\n", rcmd->file);
+      sysexit();
     }
     runcmd(rcmd->cmd);
     break;
@@ -126,15 +146,15 @@ runcmd(struct cmd *cmd)
       runcmd(bcmd->cmd);
     break;
   }
-  exit();
+  sysexit();
 }
 
 int
 getcmd(char *buf, int nbuf)
 {
-  printf(2, "$ ");
+  fprintf(stderr, "$ ");
   memset(buf, 0, nbuf);
-  gets(buf, nbuf);
+  ngets(buf, nbuf);
   if(buf[0] == 0) // EOF
     return -1;
   return 0;
@@ -164,14 +184,14 @@ main(void)
       // Chdir has no effect on the parent if run in the child.
       buf[strlen(buf)-1] = 0;  // chop \n
       if(chdir(buf+3) < 0)
-        printf(2, "cannot cd %s\n", buf+3);
+        fprintf(stderr, "cannot cd %s\n", buf+3);
       continue;
     }
     // $ pwd
     if (buf[0] == 'p' && buf[1] == 'w' && buf[2] == 'd' && buf[3] == '\n'){
         if (getcwd(cwd, sizeof(cwd)) < 0)
           panic("cannot retrieve cwd");
-        printf(1, "cwd: %s\n", cwd);
+        fprintf(stderr, "cwd: %s\n", cwd);
         continue;
     }
     // $ <everything else>
@@ -179,14 +199,14 @@ main(void)
       runcmd(parsecmd(buf));
     wait();
   }
-  exit();
+  sysexit();
 }
 
 void
 panic(char *s)
 {
-  printf(2, "%s\n", s);
-  exit();
+  fprintf(stderr, "%s\n", s);
+  sysexit();
 }
 
 int
@@ -345,7 +365,7 @@ parsecmd(char *s)
   cmd = parseline(&s, es);
   peek(&s, es, "");
   if(s != es){
-    printf(2, "leftovers: %s\n", s);
+    fprintf(stderr, "leftovers: %s\n", s);
     panic("syntax");
   }
   nulterminate(cmd);

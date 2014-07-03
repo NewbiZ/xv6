@@ -1,5 +1,6 @@
-top_srcdir = ..
-include $(top_srcdir)/Makefile.common
+TOP_SRCDIR = ..
+COMPONENT = VMM    
+include $(TOP_SRCDIR)/Makefile.common
 
 KERNEL_VMM_OBJS = \
 	vm.o            \
@@ -9,12 +10,10 @@ KERNEL_VMM_OBJS = \
 all: kernel_vmm.o
 
 kernel_vmm.o: $(KERNEL_VMM_OBJS)
-	@echo "[LD] [VMM    ] $@"
-	@$(LD) $(LDFLAGS) -r -o $@ $^
+	$(LOG_LD) $(LD) $(LDFLAGS) -r -o $@ $^
 
 %.o: %.c
-	@echo "[CC] [VMM    ] $@"
-	@$(CC) $(CFLAGS) -c -o $@ $*.c
+	$(LOG_CC) $(CC) $(CFLAGS) -c -o $@ $*.c
 
 clean:
-	$(RM) -rf *.o
+	$(LOG_CMD) $(RM) -rf *.o

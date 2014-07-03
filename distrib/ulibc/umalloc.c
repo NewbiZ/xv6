@@ -1,8 +1,8 @@
-#include <xv6/types.h>
-#include <xv6/stat.h>
-#include <xv6/param.h>
+#include <../../include/xv6/types.h>
+#include <../../include/xv6/stat.h>
+#include <../../include/xv6/param.h>
 
-#include "../ulibc/ulibc.h"
+#include <ulibc/ulibc.h>
 
 // Memory allocator by Kernighan and Ritchie,
 // The C programming Language, 2nd ed.  Section 8.7.

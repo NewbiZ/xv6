@@ -1,5 +1,6 @@
-top_srcdir = ../..
-include $(top_srcdir)/Makefile.common
+TOP_SRCDIR = ../..
+COMPONENT = "DRIVERS"
+include $(TOP_SRCDIR)/Makefile.common
 
 KEYBOARD_OBJS = \
 	kbd.o    \
@@ -9,12 +10,10 @@ KEYBOARD_OBJS = \
 all: kernel_driver_keyboard.o
 
 kernel_driver_keyboard.o: $(KEYBOARD_OBJS)
-	@echo "[LD] [DRIVERS] $@"
-	@$(LD) $(LDFLAGS) -r -o $@ $^
+	$(LOG_LD) $(LD) $(LDFLAGS) -r -o $@ $^
 
 %.o: %.c
-	@echo "[CC] [DRIVERS] $@"
-	@$(CC) $(CFLAGS) -c -o $@ $*.c
+	$(LOG_CC) $(CC) $(CFLAGS) -c -o $@ $*.c
 
 clean:
-	$(RM) -rf *.o
+	$(LOG_CMD) $(RM) -rf *.o

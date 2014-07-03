@@ -2,6 +2,7 @@
 #define DIRENT_H
 
 #include <xv6/stdio.h>
+#include <xv6/types.h>
 
 struct dirent
 {

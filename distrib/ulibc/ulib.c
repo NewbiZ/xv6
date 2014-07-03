@@ -1,9 +1,7 @@
-#include <xv6/types.h>
-#include <xv6/stat.h>
-#include <xv6/fcntl.h>
-#include <xv6/x86.h>
-
-#include "ulibc.h"
+#include <ulibc/ulibc.h>
+#include <../../include/xv6/stat.h>
+#include <../../include/xv6/fcntl.h>
+#include <../../include/xv6/x86.h>
 
 char*
 strcpy(char *s, char *t)
@@ -24,7 +22,7 @@ strcmp(const char *p, const char *q)
   return (uchar)*p - (uchar)*q;
 }
 
-uint
+unsigned int
 strlen(char *s)
 {
   int n;
@@ -35,7 +33,7 @@ strlen(char *s)
 }
 
 void*
-memset(void *dst, int c, uint n)
+memset(void *dst, int c, unsigned int n)
 {
   stosb(dst, c, n);
   return dst;
