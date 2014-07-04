@@ -25,7 +25,7 @@ typedef struct
 #define EXIT_SUCCESS 0
 #define EXIT_FAILURE 1
 
-#define RAND_MAX 0x7FFFFFFF
+#define RAND_MAX 0x7fffffff
 
 #define MB_CUR_MAX 1
 

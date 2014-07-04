@@ -1,91 +1,149 @@
 #include <ulibc/stdlib.h>
 
+#include <ulibc/ulibc.h>
+#include <ulibc/ctype.h>
 #include <ulibc/assert.h>
 
 double atof(const char* nptr)
 {
+  //TODO
   assert(0 && "not implemented yet.");
   return 0;
 }
 
 int atoi(const char* nptr)
 {
-  assert(0 && "not implemented yet.");
-  return 0;
+  int result = 0;
+  int mul = 1;
+
+  // Skip whitespaces
+  while (isspace(*nptr))
+    ++nptr;
+
+  // Check for +/- sign
+  switch (*nptr)
+  {
+    case '-': mul = -1;
+    case '+': ++nptr;
+  }
+
+  // All the remaining ones
+  while (isdigit(*nptr))
+    result = 10*result + (*nptr++-'0');
+
+  return mul * result;
 }
 
 long int atol(const char* nptr)
 {
-  assert(0 && "not implemented yet.");
-  return 0;
+  long result = 0;
+  int mul = 1;
+
+  // Skip whitespaces
+  while (isspace(*nptr))
+    ++nptr;
+
+  // Check for +/- sign
+  switch (*nptr)
+  {
+    case '-': mul = -1;
+    case '+': ++nptr;
+  }
+
+  // All the remaining ones
+  while (isdigit(*nptr))
+    result = 10*result + (*nptr++-'0');
+
+  return mul * result;
 }
 
 double strtod(const char* nptr, char** endptr)
 {
+  //TODO
   assert(0 && "not implemented yet.");
   return 0;
 }
 
 long int strtol(const char* nptr, char** endptr, int base)
 {
+  //TODO
   assert(0 && "not implemented yet.");
   return 0;
 }
 
 unsigned long int strtoul(const char* nptr, char** endptr, int base)
 {
+  //TODO
   assert(0 && "not implemented yet.");
   return 0;
+}
+
+static int __ulibc_srand_seed;
+
+void srand(unsigned int seed)
+{
+  //TODO
+  __ulibc_srand_seed = seed;
 }
 
 int rand(void)
 {
-  assert(0 && "not implemented yet.");
-  return 0;
-}
-
-void srand(unsigned int seed)
-{
-  assert(0 && "not implemented yet.");
+  //TODO
+  return __ulibc_srand_seed++ % RAND_MAX;
 }
 
 void* calloc(size_t nmemb, size_t size)
 {
+  //TODO
   assert(0 && "not implemented yet.");
   return 0;
 }
 
 void free(void* ptr)
 {
-  assert(0 && "not implemented yet.");
+  //TODO
+  __ulibc_free(ptr);
 }
 
 void* malloc(size_t size)
 {
-  assert(0 && "not implemented yet.");
-  return 0;
+  //TODO
+  return __ulibc_malloc(size);
 }
 
 void* realloc(void* ptr, size_t size)
 {
+  //TODO
   assert(0 && "not implemented yet.");
   return 0;
 }
 
 void abort(void)
 {
-  assert(0 && "not implemented yet.");
+  //TODO
+  __ulibc_printf(2, "Abort.\n");
+  sysexit();
 }
+
+// TODO: posix requires this 32 to be ATEXIT_MAX
+static void (*__ulibc_atexit_func[32])(void);
+static void (**__ulibc_atexit_func_cur)(void) = __ulibc_atexit_func;
 
 int atexit(void (*func)(void))
 {
-  assert(0 && "not implemented yet.");
-  return 0;
+  if (__ulibc_atexit_func_cur<__ulibc_atexit_func+32)
+  {
+    *(__ulibc_atexit_func_cur++) = func;
+    return 0;
+  }
+  return 1;
 }
 
 void exit(int status)
 {
-  assert(0 && "not implemented yet.");
+  while (__ulibc_atexit_func_cur>=__ulibc_atexit_func)
+    (*__ulibc_atexit_func_cur--)();
+  sysexit();
 }
 
 char* getenv(const char* name)

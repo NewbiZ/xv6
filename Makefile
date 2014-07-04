@@ -9,7 +9,7 @@ ALL_KERNEL_OBJS =          \
 	vmm/kernel_vmm.o         \
 	drivers/kernel_drivers.o \
 
-.PHONY: all motd kernel distrib kerneldisk
+.PHONY: all motd kernel distrib distrib_check kerneldisk
 .PRECIOUS: boot/%.o drivers/acpi/%.o drivers/serial/%.o drivers/keyboard/%.o drivers/ide/%.o kernel/%.o fs/%.o vmm/%.o
 
 all: motd kerneldisk distrib
@@ -23,6 +23,8 @@ kernel: kernel.img
 
 distrib: distrib/distrib.img
 
+distrib_check: distrib/distrib_check.img
+
 kerneldisk: disk.img
 
 disk.img: boot/bootblock kernel.img
@@ -33,6 +35,9 @@ disk.img: boot/bootblock kernel.img
 
 distrib/distrib.img:
 	$(LOG_MAKE) -C distrib
+
+distrib/distrib_check.img:
+	$(LOG_MAKE) -C distrib check
 
 boot/bootblock:
 	$(LOG_MAKE) -C boot bootblock
@@ -54,6 +59,9 @@ $(ALL_KERNEL_OBJS):
 
 qemu: distrib/distrib.img disk.img
 	$(LOG_CMD) $(QEMU) -serial mon:stdio -hdb distrib/distrib.img disk.img -smp 2 -m 512 $(QEMUEXTRA)
+
+check: distrib/distrib_check.img disk.img
+	$(LOG_CMD) $(QEMU) -nographic -serial mon:stdio -hdb distrib/distrib_check.img disk.img -smp 2 -m 512 $(QEMUEXTRA)
 
 clean:
 	$(LOG_CMD) $(RM) -rf kernel.img disk.img
