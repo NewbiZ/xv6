@@ -7,6 +7,7 @@
 void __ulibc_assert(const char* c, const char* file, int line)
 {
   __ulibc_printf(2, "Assertion failed: %s (%s:%d)\n", c, file, line);
+  //TODO: should fflush again when ulibc ready
   //fflush(NULL);
   abort();
 }

@@ -35,6 +35,7 @@ DISTRIB_ULIBC =   \
 
 DISTRIB_ULIBC_TESTS = \
 	tests/stdlib        \
+	tests/string        \
 
 .PHONY: all check motd
 .PRECIOUS: coreutils/%.o ulibc/%.o tests/%.o
@@ -57,7 +58,7 @@ distrib_check.img: motd mkfs.xv6 $(DISTRIB_COREUTILS) $(DISTRIB_ULIBC_TESTS)
 	@echo "\033[32;1mCreated test distribution disk image "\""$@"\""\033[0m"
 
 mkfs.xv6: mkfs/mkfs.xv6.c
-	$(LOG_CC) $(CC) -ggdb -O0 -Wall -I$(shell pwd)/../include -o mkfs.xv6 mkfs/mkfs.xv6.c
+	$(LOG_CC) $(CC) -Wall -I$(shell pwd)/../include -o mkfs.xv6 mkfs/mkfs.xv6.c
 
 coreutils/%: coreutils/%.o $(DISTRIB_ULIBC)
 	$(LOG_LD) $(LD) $(LDFLAGS) -N -e main -Ttext 0 -o $@ $^

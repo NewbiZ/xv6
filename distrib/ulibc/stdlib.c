@@ -148,35 +148,41 @@ void exit(int status)
 
 char* getenv(const char* name)
 {
+  //TODO
   assert(0 && "not implemented yet.");
   return 0;
 }
 
 int system(const char* string)
 {
+  //TODO
   assert(0 && "not implemented yet.");
   return 0;
 }
 
 void* bsearch(const void* key, const void* base, size_t nmemb, size_t size, int (*compar)(const void*, const void*))
 {
+  //TODO
   assert(0 && "not implemented yet.");
   return 0;
 }
 
 void qsort(void* base, size_t nmemb, size_t size, int (*compar)(const void*, const void*))
 {
+  //TODO
   assert(0 && "not implemented yet.");
 }
 
 int abs(int j)
 {
+  //TODO
   assert(0 && "not implemented yet.");
   return 0;
 }
 
 div_t div(int numer, int denom)
 {
+  //TODO
   assert(0 && "not implemented yet.");
   div_t r;
   return r;
@@ -184,12 +190,14 @@ div_t div(int numer, int denom)
 
 long int labs(long int j)
 {
+  //TODO
   assert(0 && "not implemented yet.");
   return 0;
 }
 
 ldiv_t ldiv(long int numer, long int denom)
 {
+  //TODO
   assert(0 && "not implemented yet.");
   ldiv_t r;
   return r;
@@ -197,30 +205,35 @@ ldiv_t ldiv(long int numer, long int denom)
 
 int mblen(const char* s, size_t n)
 {
+  //TODO
   assert(0 && "not implemented yet.");
   return 0;
 }
 
 int mbtowc(wchar_t* pwc, const char* s, size_t n)
 {
+  //TODO
   assert(0 && "not implemented yet.");
   return 0;
 }
 
 int wctomb(char* s, wchar_t wchar)
 {
+  //TODO
   assert(0 && "not implemented yet.");
   return 0;
 }
 
 size_t mbstowcs(wchar_t* pwcs, const char* s, size_t n)
 {
+  //TODO
   assert(0 && "not implemented yet.");
   return 0;
 }
 
 size_t wcstombs(char* s, const wchar_t* pwcs, size_t n)
 {
+  //TODO
   assert(0 && "not implemented yet.");
   return 0;
 }

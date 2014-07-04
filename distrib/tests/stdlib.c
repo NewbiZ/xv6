@@ -1,6 +1,8 @@
 #include <ulibc/ulibc.h>
 #include <ulibc/stdlib.h>
 #include <ulibc/limits.h>
+
+#undef NDEBUG
 #include <ulibc/assert.h>
 
 #define TEST_FLOAT(c, res)                          \
