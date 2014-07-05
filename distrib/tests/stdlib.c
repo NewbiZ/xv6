@@ -2,44 +2,7 @@
 #include <ulibc/stdlib.h>
 #include <ulibc/limits.h>
 
-#undef NDEBUG
-#include <ulibc/assert.h>
-
-#define TEST_FLOAT(c, res)                          \
-  {                                                 \
-    float r = (c);                                  \
-    if (r != (res))                                 \
-    {                                               \
-      __ulibc_printf(2, "Test failed: %s\n", (#c)); \
-      __ulibc_printf(2, "Obtained: %f\n", r);       \
-      __ulibc_printf(2, "Expected: %f\n", res);     \
-      abort();                                      \
-    }                                               \
-  }
-
-#define TEST_INT(c, res)                            \
-  {                                                 \
-    int r = (c);                                    \
-    if (r != (res))                                 \
-    {                                               \
-      __ulibc_printf(2, "Test failed: %s\n", (#c)); \
-      __ulibc_printf(2, "Obtained: %d\n", r);       \
-      __ulibc_printf(2, "Expected: %d\n", res);     \
-      abort();                                      \
-    }                                               \
-  }
-
-#define TEST_LONG(c, res)                           \
-  {                                                 \
-    long r = (c);                                   \
-    if (r != (res))                                 \
-    {                                               \
-      __ulibc_printf(2, "Test failed: %s\n", (#c)); \
-      __ulibc_printf(2, "Obtained: %l\n", r);       \
-      __ulibc_printf(2, "Expected: %l\n", res);     \
-      abort();                                      \
-    }                                               \
-  }
+#include "test.h"
 
 // Spec: C89 section 4.10.1.2
 void test_atoi(void)

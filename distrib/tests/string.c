@@ -2,23 +2,7 @@
 #include <ulibc/stdlib.h>
 #include <ulibc/string.h>
 
-#undef NDEBUG
-#include <ulibc/assert.h>
-
-#define TEST_BUFFER(src, dst, sz)                        \
-  {                                                      \
-    int _i = 0;                                          \
-    for (; _i<sz; ++_i)                                  \
-    {                                                    \
-      if (src[_i] != dst[_i])                            \
-      {                                                  \
-        __ulibc_printf(2, "%s:%d ", __FILE__, __LINE__); \
-        __ulibc_printf(2, "at offset %d: %d != %d\n",    \
-            _i, src[_i], dst[_i]);                       \
-        abort();                                         \
-      }                                                  \
-    }                                                    \
-  }
+#include "test.h"
 
 // Spec: C89 section 4.11.2.1
 void test_memcpy(void)
@@ -35,8 +19,8 @@ void test_memcpy(void)
 void test_memmove(void)
 {
   char input[5] = {[0]=0, [1]=1, [2]=2, [3]=3, [4]=4};
-  char expected[3] = {[0]=0, [1]=1, [2]=2};
   char* output = input+2;
+  char expected[3] = {[0]=0, [1]=1, [2]=2};
   void* res = memmove(output, input, 3);
 
   assert(res == output);
@@ -67,12 +51,36 @@ void test_strncpy(void)
   TEST_BUFFER(output, input, sizeof(input));
 }
 
+// Spec: C89 section 4.11.3.1
 void test_strcat(void)
 {
+  char s1[] = "s1";
+  char s2[] = "s2";
+  char s3[] = "s3";
+  char out[7] = {[0] = 0, [1 ... 6] = '?'};
+  char exp[] = "s1s2s3";
+
+  strcat(out, s1);
+  strcat(out, s2);
+  strcat(out, s3);
+
+  TEST_BUFFER(out, exp, sizeof(exp));
 }
 
+// Spec: C89 section 4.11.3.2
 void test_strncat(void)
 {
+  char s1[] = "s1";
+  char s2[] = "s2";
+  char s3[] = "s3";
+  char out[7] = {[0] = 0, [1 ... 6] = '?'};
+  char exp[] = "s1s2s3";
+
+  strncat(out, s1, 2);
+  strncat(out, s2, 2);
+  strncat(out, s3, 2);
+
+  TEST_BUFFER(out, exp, sizeof(exp));
 }
 
 void test_memcmp(void)
@@ -135,8 +143,14 @@ void test_strerror(void)
 {
 }
 
+// Spec: C89 section 4.11.6.3
 void test_strlen(void)
 {
+  char s1[] = "";
+  char s2[] = "test";
+
+  TEST_INT(strlen(s1), sizeof(s1)-1);
+  TEST_INT(strlen(s2), sizeof(s2)-1);
 }
 
 int main(int argc, char** argv)

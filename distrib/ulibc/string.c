@@ -39,129 +39,142 @@ char* strncpy(char* s1, const char* s2, size_t n)
   return s1;
 }
 
-char *strcat(char *s1, const char *s2)
+char* strcat(char* s1, const char* s2)
+{
+  char* b = s1;
+
+  // Skip to end of s1
+  while (*s1) ++s1;
+  // Append s2
+  while (*s2) *s1++ = *s2++;
+  // Add final '\0'
+  *s1 = 0;
+
+  return b;
+}
+
+char* strncat(char* s1, const char* s2, size_t n)
+{
+  size_t dstlen = strlen(s1);
+  size_t i = 0;
+
+  for (; i<n && s2[i]!=0 ; ++i)
+    s1[dstlen+i] = s2[i];
+  s1[dstlen+i] = 0;
+
+  return s1;
+
+}
+
+int memcmp(const void* s1, const void* s2, size_t n)
 {
   //TODO
   assert(0 && "not implemented yet.");
   return 0;
 }
 
-char *strncat(char *s1, const char *s2, size_t n)
+int strcmp(const char* s1, const char* s2)
 {
   //TODO
   assert(0 && "not implemented yet.");
   return 0;
 }
 
-int memcmp(const void *s1, const void *s2, size_t n)
+int strcoll(const char* s1, const char* s2)
 {
   //TODO
   assert(0 && "not implemented yet.");
   return 0;
 }
 
-int strcmp(const char *s1, const char *s2)
+int strncmp(const char* s1, const char* s2, size_t n)
 {
   //TODO
   assert(0 && "not implemented yet.");
   return 0;
 }
 
-int strcoll(const char *s1, const char *s2)
+size_t strxfrm(char* s1, const char* s2, size_t n)
 {
   //TODO
   assert(0 && "not implemented yet.");
   return 0;
 }
 
-int strncmp(const char *s1, const char *s2, size_t n)
+void* memchr(const void* s, int c, size_t n)
 {
   //TODO
   assert(0 && "not implemented yet.");
   return 0;
 }
 
-size_t strxfrm(char *s1, const char *s2, size_t n)
+char* strchr(const char* s, int c)
 {
   //TODO
   assert(0 && "not implemented yet.");
   return 0;
 }
 
-void *memchr(const void *s, int c, size_t n)
+size_t strcspn(const char* s1, const char* s2)
 {
   //TODO
   assert(0 && "not implemented yet.");
   return 0;
 }
 
-char *strchr(const char *s, int c)
+char* strpbrk(const char* s1, const char* s2)
 {
   //TODO
   assert(0 && "not implemented yet.");
   return 0;
 }
 
-size_t strcspn(const char *s1, const char *s2)
+char* strrchr(const char* s, int c)
 {
   //TODO
   assert(0 && "not implemented yet.");
   return 0;
 }
 
-char *strpbrk(const char *s1, const char *s2)
+size_t strspn(const char* s1, const char* s2)
 {
   //TODO
   assert(0 && "not implemented yet.");
   return 0;
 }
 
-char *strrchr(const char *s, int c)
+char* strstr(const char* s1, const char* s2)
 {
   //TODO
   assert(0 && "not implemented yet.");
   return 0;
 }
 
-size_t strspn(const char *s1, const char *s2)
+char* strtok(char* s1, const char* s2)
 {
   //TODO
   assert(0 && "not implemented yet.");
   return 0;
 }
 
-char *strstr(const char *s1, const char *s2)
+void* memset(void* s, int c, size_t n)
 {
   //TODO
   assert(0 && "not implemented yet.");
   return 0;
 }
 
-char *strtok(char *s1, const char *s2)
+char* strerror(int errnum)
 {
   //TODO
   assert(0 && "not implemented yet.");
   return 0;
 }
 
-void *memset(void *s, int c, size_t n)
+size_t strlen(const char* s)
 {
-  //TODO
-  assert(0 && "not implemented yet.");
-  return 0;
-}
-
-char *strerror(int errnum)
-{
-  //TODO
-  assert(0 && "not implemented yet.");
-  return 0;
-}
-
-size_t strlen(const char *s)
-{
-  //TODO
-  assert(0 && "not implemented yet.");
-  return 0;
+  const char* b = s;
+  while (*s++);
+  return s-b-1;
 }
 
