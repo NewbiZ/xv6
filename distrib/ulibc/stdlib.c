@@ -16,18 +16,15 @@ int atoi(const char* nptr)
   int result = 0;
   int mul = 1;
 
-  // Skip whitespaces
   while (isspace(*nptr))
     ++nptr;
 
-  // Check for +/- sign
   switch (*nptr)
   {
     case '-': mul = -1;
     case '+': ++nptr;
   }
 
-  // All the remaining ones
   while (isdigit(*nptr))
     result = 10*result + (*nptr++-'0');
 
@@ -37,20 +34,17 @@ int atoi(const char* nptr)
 long int atol(const char* nptr)
 {
   long result = 0;
-  int mul = 1;
+  long mul = 1;
 
-  // Skip whitespaces
   while (isspace(*nptr))
     ++nptr;
 
-  // Check for +/- sign
   switch (*nptr)
   {
     case '-': mul = -1;
     case '+': ++nptr;
   }
 
-  // All the remaining ones
   while (isdigit(*nptr))
     result = 10*result + (*nptr++-'0');
 
@@ -78,18 +72,26 @@ unsigned long int strtoul(const char* nptr, char** endptr, int base)
   return 0;
 }
 
-static int __ulibc_srand_seed;
+// XOR shift 128, from Marsaglia, George: http://www.jstatsoft.org/v08/i14/paper
+// Maximal entropy: 2^128-1
+static unsigned int __ulibc_srand_seed_x;
+static unsigned int __ulibc_srand_seed_y;
+static unsigned int __ulibc_srand_seed_z;
+static unsigned int __ulibc_srand_seed_w;
 
 void srand(unsigned int seed)
 {
-  //TODO
-  __ulibc_srand_seed = seed;
+  __ulibc_srand_seed_x = seed;
 }
 
 int rand(void)
 {
-  //TODO
-  return __ulibc_srand_seed++ % RAND_MAX;
+  unsigned int t = (__ulibc_srand_seed_x^(__ulibc_srand_seed_x<<11));
+  __ulibc_srand_seed_x = __ulibc_srand_seed_y;
+  __ulibc_srand_seed_y = __ulibc_srand_seed_z;
+  __ulibc_srand_seed_z = __ulibc_srand_seed_w;
+  __ulibc_srand_seed_w = (__ulibc_srand_seed_w^(__ulibc_srand_seed_w>>19))^(t^(t>>8));
+  return __ulibc_srand_seed_w % RAND_MAX;
 }
 
 void* calloc(size_t nmemb, size_t size)

@@ -17,10 +17,10 @@
 
 #define static_assert(a, b) do { switch (0) case 0: case (a): ; } while (0)
 
-int nblocks = 985;
+int nblocks = 2009;
 int nlog = LOGSIZE;
 int ninodes = 200;
-int size = 1024;
+int size = 2048;
 
 int fsfd;
 struct superblock sb;
@@ -212,7 +212,8 @@ rsect(uint sec, void *buf)
     perror("lseek");
     exit(1);
   }
-  if(read(fsfd, buf, 512) != 512){
+  int r = read(fsfd, buf, 512);
+  if(r != 512){
     perror("read");
     exit(1);
   }
