@@ -434,6 +434,36 @@ char* resolve_bin(char* s)
   {
     strcpy(dup, "/bin/");
     strncat(dup, s, strcspn(s, " \n\r"));
+
+    if (open(dup, 0) < 0)
+    {
+      strcpy(dup, "/sbin/");
+      strncat(dup, s, strcspn(s, " \n\r"));
+
+      if (open(dup, 0) < 0)
+      {
+        strcpy(dup, "/usr/sbin/");
+        strncat(dup, s, strcspn(s, " \n\r"));
+
+        if (open(dup, 0) < 0)
+        {
+          strcpy(dup, "/usr/local/sbin/");
+          strncat(dup, s, strcspn(s, " \n\r"));
+
+          if (open(dup, 0) < 0)
+          {
+            strcpy(dup, "/usr/bin/");
+            strncat(dup, s, strcspn(s, " \n\r"));
+
+            if (open(dup, 0) < 0)
+            {
+              strcpy(dup, "/usr/local/bin/");
+              strncat(dup, s, strcspn(s, " \n\r"));
+            }
+          }
+        }
+      }
+    }
   }
   return dup;
 }

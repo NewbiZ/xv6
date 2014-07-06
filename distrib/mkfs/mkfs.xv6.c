@@ -126,7 +126,6 @@ void copy_coreutils(uint binino)
   copy_file(binino, "coreutils/dmesg");
   copy_file(binino, "coreutils/echo");
   copy_file(binino, "coreutils/false");
-  copy_file(binino, "coreutils/halt"); // Not FHS
   copy_file(binino, "coreutils/hostname");
   copy_file(binino, "coreutils/kill");
   copy_file(binino, "coreutils/ln");
@@ -151,13 +150,20 @@ void copy_coreutils(uint binino)
   copy_file(binino, "coreutils/uname");
 }
 
-// Create the while Filesystem Hierarchy Standard (FHS)
-int create_fhs(uint rootino)
+void copy_sysutils(int sbinino, const char* initfile)
 {
+  copy_file(sbinino, "coreutils/halt");
+  copy_file(sbinino, initfile);
+}
+
+// Create the while Filesystem Hierarchy Standard (FHS)
+void create_fhs(uint rootino, const char* initfile)
+{
+  // /
   int binino = create_dir(rootino, "bin");
   create_dir(rootino, "boot");
   create_dir(rootino, "dev");
-  create_dir(rootino, "etc");
+  int etcino = create_dir(rootino, "etc");
   create_dir(rootino, "home");
   create_dir(rootino, "lib");
   create_dir(rootino, "media");
@@ -167,12 +173,50 @@ int create_fhs(uint rootino)
   int sbinino = create_dir(rootino, "sbin");
   create_dir(rootino, "srv");
   create_dir(rootino, "tmp");
-  create_dir(rootino, "usr");
-  create_dir(rootino, "var");
+  int usrino = create_dir(rootino, "usr");
+  int varino = create_dir(rootino, "var");
+
+  // /etc
+  create_dir(etcino, "opt");
+
+  // /usr
+  int usrlocalino = create_dir(usrino, "local");
+  create_dir(usrino, "bin");
+  create_dir(usrino, "include");
+  create_dir(usrino, "sbin");
+  int usrshareino = create_dir(usrino, "share");
+
+  // /usr/local
+  create_dir(usrlocalino, "bin");
+  create_dir(usrlocalino, "etc");
+  create_dir(usrlocalino, "games");
+  create_dir(usrlocalino, "include");
+  create_dir(usrlocalino, "lib");
+  create_dir(usrlocalino, "man");
+  create_dir(usrlocalino, "sbin");
+  create_dir(usrlocalino, "share");
+  create_dir(usrlocalino, "src");
+
+  // /usr/share
+  create_dir(usrshareino, "man");
+  create_dir(usrshareino, "misc");
+
+  // /var
+  create_dir(varino, "cache");
+  int varlibino = create_dir(varino, "lib");
+  create_dir(varino, "local");
+  create_dir(varino, "lock");
+  create_dir(varino, "log");
+  create_dir(varino, "opt");
+  create_dir(varino, "run");
+  create_dir(varino, "spool");
+  create_dir(varino, "tmp");
+
+  // /var/lib
+  create_dir(varlibino, "misc");
 
   copy_coreutils(binino);
-
-  return sbinino;
+  copy_sysutils(sbinino, initfile);
 }
 
 void create_tests(uint rootino)
@@ -250,14 +294,12 @@ int main(int argc, char *argv[])
 
   if (!strcmp(argv[2], "release"))
   {
-    int sbinino = create_fhs(rootino);
-    create_init(sbinino, "coreutils/init");
+    create_fhs(rootino, "coreutils/init");
   }
   else if (!strcmp(argv[2], "test"))
   {
-    int sbinino = create_fhs(rootino);
+    create_fhs(rootino, "tests/init");
     create_tests(rootino);
-    create_init(sbinino, "tests/init");
   }
 
   // fix size of root inode dir
