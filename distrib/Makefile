@@ -2,19 +2,42 @@ TOP_SRCDIR = .
 COMPONENT = DISTRIB  
 include $(TOP_SRCDIR)/Makefile.common
 
-DISTRIB_COREUTILS = \
-	coreutils/cat     \
-	coreutils/echo    \
-	coreutils/grep    \
-	coreutils/init    \
-	coreutils/kill    \
-	coreutils/ln      \
-	coreutils/ls      \
-	coreutils/mkdir   \
-	coreutils/rm      \
-	coreutils/sh      \
-	coreutils/wc      \
-	coreutils/halt    \
+DISTRIB_COREUTILS =    \
+	coreutils/cat        \
+	coreutils/chgrp      \
+	coreutils/chmod      \
+	coreutils/chown      \
+	coreutils/cp         \
+	coreutils/date       \
+	coreutils/dd         \
+	coreutils/df         \
+	coreutils/dmesg      \
+	coreutils/echo       \
+	coreutils/false      \
+	coreutils/halt       \
+	coreutils/hostname   \
+	coreutils/kill       \
+	coreutils/ln         \
+	coreutils/login      \
+	coreutils/ls         \
+	coreutils/mkdir      \
+	coreutils/mknod      \
+	coreutils/more       \
+	coreutils/mount      \
+	coreutils/mv         \
+	coreutils/ps         \
+	coreutils/pwd        \
+	coreutils/rm         \
+	coreutils/rmdir      \
+	coreutils/sed        \
+	coreutils/sh         \
+	coreutils/stty       \
+	coreutils/su         \
+	coreutils/sync       \
+	coreutils/true       \
+	coreutils/umount     \
+	coreutils/uname      \
+	coreutils/init       \
 
 DISTRIB_ULIBC =   \
 	ulibc/ctype.o   \

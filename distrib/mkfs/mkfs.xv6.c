@@ -17,10 +17,12 @@
 
 #define static_assert(a, b) do { switch (0) case 0: case (a): ; } while (0)
 
-int nblocks = 2009;
+int nblocks = 4056;
+//int nblocks = 2009;
 int nlog = LOGSIZE;
 int ninodes = 200;
-int size = 2048;
+//int size = 2048;
+int size = 4096;
 
 int fsfd;
 struct superblock sb;
@@ -113,33 +115,64 @@ void copy_file(uint parentino, const char* file)
 // Copy all coreutils binaries. /bin inode number should be provided
 void copy_coreutils(uint binino)
 {
-  // /bin
   copy_file(binino, "coreutils/cat");
+  copy_file(binino, "coreutils/chgrp");
+  copy_file(binino, "coreutils/chmod");
+  copy_file(binino, "coreutils/chown");
+  copy_file(binino, "coreutils/cp");
+  copy_file(binino, "coreutils/date");
+  copy_file(binino, "coreutils/dd");
+  copy_file(binino, "coreutils/df");
+  copy_file(binino, "coreutils/dmesg");
   copy_file(binino, "coreutils/echo");
-  copy_file(binino, "coreutils/grep");
-  copy_file(binino, "coreutils/halt");
+  copy_file(binino, "coreutils/false");
+  copy_file(binino, "coreutils/halt"); // Not FHS
+  copy_file(binino, "coreutils/hostname");
   copy_file(binino, "coreutils/kill");
   copy_file(binino, "coreutils/ln");
+  copy_file(binino, "coreutils/login");
   copy_file(binino, "coreutils/ls");
   copy_file(binino, "coreutils/mkdir");
+  copy_file(binino, "coreutils/mknod");
+  copy_file(binino, "coreutils/more");
+  copy_file(binino, "coreutils/mount");
+  copy_file(binino, "coreutils/mv");
+  copy_file(binino, "coreutils/ps");
+  copy_file(binino, "coreutils/pwd");
   copy_file(binino, "coreutils/rm");
+  copy_file(binino, "coreutils/rmdir");
+  copy_file(binino, "coreutils/sed");
   copy_file(binino, "coreutils/sh");
-  copy_file(binino, "coreutils/wc");
+  copy_file(binino, "coreutils/stty");
+  copy_file(binino, "coreutils/su");
+  copy_file(binino, "coreutils/sync");
+  copy_file(binino, "coreutils/true");
+  copy_file(binino, "coreutils/umount");
+  copy_file(binino, "coreutils/uname");
 }
 
 // Create the while Filesystem Hierarchy Standard (FHS)
-void create_fhs(uint rootino)
+int create_fhs(uint rootino)
 {
-  uint binino = create_dir(rootino, "bin");
-  uint devino = create_dir(rootino, "dev");
-  uint homeino = create_dir(rootino, "home");
-  uint tmpino = create_dir(rootino, "tmp");
-
-  (void)devino;
-  (void)homeino;
-  (void)tmpino;
+  int binino = create_dir(rootino, "bin");
+  create_dir(rootino, "boot");
+  create_dir(rootino, "dev");
+  create_dir(rootino, "etc");
+  create_dir(rootino, "home");
+  create_dir(rootino, "lib");
+  create_dir(rootino, "media");
+  create_dir(rootino, "mnt");
+  create_dir(rootino, "opt");
+  create_dir(rootino, "root");
+  int sbinino = create_dir(rootino, "sbin");
+  create_dir(rootino, "srv");
+  create_dir(rootino, "tmp");
+  create_dir(rootino, "usr");
+  create_dir(rootino, "var");
 
   copy_coreutils(binino);
+
+  return sbinino;
 }
 
 void create_tests(uint rootino)
@@ -148,10 +181,8 @@ void create_tests(uint rootino)
   copy_file(rootino, "tests/string");
 }
 
-void create_init(uint rootino, const char* file)
+void create_init(uint sbinino, const char* file)
 {
-  uint sbinino = create_dir(rootino, "sbin");
-
   copy_file(sbinino, file);
 }
 
@@ -189,7 +220,7 @@ int main(int argc, char *argv[])
   usedblocks = ninodes / IPB + 3 + bitblocks;
   freeblock = usedblocks;
 
-  if (0)
+  if (1)
   {
     printf("used %d (bit %d ninode %zu) free %u log %u total %d\n", usedblocks,
            bitblocks, ninodes/IPB + 1, freeblock, nlog, nblocks+usedblocks+nlog);
@@ -219,14 +250,14 @@ int main(int argc, char *argv[])
 
   if (!strcmp(argv[2], "release"))
   {
-    create_fhs(rootino);
-    create_init(rootino, "coreutils/init");
+    int sbinino = create_fhs(rootino);
+    create_init(sbinino, "coreutils/init");
   }
   else if (!strcmp(argv[2], "test"))
   {
-    create_fhs(rootino);
+    int sbinino = create_fhs(rootino);
     create_tests(rootino);
-    create_init(rootino, "tests/init");
+    create_init(sbinino, "tests/init");
   }
 
   // fix size of root inode dir
