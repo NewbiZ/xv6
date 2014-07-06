@@ -1,6 +1,8 @@
 Unix v6
 =======
 
+![preview](https://github.com/newbiz/xv6/raw/master/splash.png)
+
 This is the reimplementation in ANSI C of Unix v6.
 
 Features

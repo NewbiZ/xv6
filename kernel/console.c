@@ -130,6 +130,27 @@ panic(char *s)
 #define CRTPORT 0x3d4
 static ushort *crt = (ushort*)P2V(0xb8000);  // CGA memory
 
+#include "splash.h"
+void splash(void)
+{
+  // Set starting position at 0x0
+  outb(CRTPORT, 14);
+  outb(CRTPORT+1, 0);
+  outb(CRTPORT, 15);
+  outb(CRTPORT+1, 0);
+
+  // Copy RAW CGA TM 80x25 CP437 splash in CGA memory
+  uint i = 0;
+  for (i=0; i<4000/sizeof(ushort); ++i)
+    crt[i] = *((const ushort*)cga_cp437_splash+i);
+
+  // Set end position position at 0x25
+  outb(CRTPORT, 14);
+  outb(CRTPORT+1, 7);
+  outb(CRTPORT, 15);
+  outb(CRTPORT+1, 127);
+}
+
 static void
 cgaputc(int c, int fgcolor, int bgcolor)
 {
