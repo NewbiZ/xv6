@@ -1,6 +1,6 @@
 #include <ulibc/ulibc.h>
 //#include <ulibc/stdio.h>
-//#include <ulibc/string.h>
+#include <ulibc/string.h>
 //#include <ulibc/stdlib.h>
 
 #include <xv6/fcntl.h>
@@ -77,6 +77,7 @@ runcmd(struct cmd *cmd)
     if(ecmd->argv[0] == 0)
       sysexit();
     exec(ecmd->argv[0], ecmd->argv);
+    __ulibc_free(ecmd->argv[0]);
     __ulibc_printf(2, "exec %s failed\n", ecmd->argv[0]);
     break;
 
@@ -150,7 +151,7 @@ main(void)
   int fd;
   
   // Assumes three file descriptors open.
-  while((fd = open("console", O_RDWR)) >= 0){
+  while((fd = open("/dev/console", O_RDWR)) >= 0){
     if (fd >= 3)
     {
       close(fd);
@@ -425,6 +426,18 @@ parseblock(char **ps, char *es)
   return cmd;
 }
 
+char* resolve_bin(char* s)
+{
+  char* dup = (char*)__ulibc_malloc(512);
+  strncpy(dup, s, strcspn(s, " \n\r"));
+  if (open(dup, 0) < 0)
+  {
+    strcpy(dup, "/bin/");
+    strncat(dup, s, strcspn(s, " \n\r"));
+  }
+  return dup;
+}
+
 struct cmd*
 parseexec(char **ps, char *es)
 {
@@ -446,7 +459,10 @@ parseexec(char **ps, char *es)
       break;
     if(tok != 'a')
       panic("syntax");
-    cmd->argv[argc] = q;
+    if (argc==0)
+      cmd->argv[argc] = resolve_bin(q);
+    else
+      cmd->argv[argc] = q;
     cmd->eargv[argc] = eq;
     argc++;
     if(argc >= MAXARGS)

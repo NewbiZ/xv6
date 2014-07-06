@@ -38,19 +38,19 @@ void rsect(uint sec, void *buf);
 uint ialloc(ushort type);
 void iappend(uint inum, void *p, int n);
 
-// convert to intel byte order
-ushort
-xshort(ushort x)
+// Convert to intel byte order
+ushort xshort(ushort x)
 {
   ushort y;
   uchar *a = (uchar*)&y;
   a[0] = x;
   a[1] = x >> 8;
+
   return y;
 }
 
-uint
-xint(uint x)
+// Convert to intel byte order
+uint xint(uint x)
 {
   uint y;
   uchar *a = (uchar*)&y;
@@ -58,22 +58,116 @@ xint(uint x)
   a[1] = x >> 8;
   a[2] = x >> 16;
   a[3] = x >> 24;
+
   return y;
 }
 
-int
-main(int argc, char *argv[])
+// Create a directory and attach it to the provided inode number
+uint create_dir(uint inoparent, const char* path)
 {
-  int i, cc, fd;
-  uint rootino, inum, off;
+  struct dirent de;
+  int inocurrent;
+
+  // Create directory entry
+  inocurrent = ialloc(T_DIR);
+  bzero(&de, sizeof(de));
+  de.d_ino = inocurrent;
+  strcpy(de.d_name, path);
+  iappend(inoparent, &de, sizeof(de));
+
+  // Create parent directory link
+  bzero(&de, sizeof(de));
+  de.d_ino = inocurrent;
+  strcpy(de.d_name, ".");
+  iappend(inocurrent, &de, sizeof(de));
+
+  // Create current directory link
+  bzero(&de, sizeof(de));
+  de.d_ino = inoparent;
+  strcpy(de.d_name, "..");
+  iappend(inocurrent, &de, sizeof(de));
+
+  return inocurrent;
+}
+
+// Copy file from local filesystem to distribution image. Basename is used.
+void copy_file(uint parentino, const char* file)
+{
+  char buf[512];
+  int cc;
+  struct dirent de;
+  uint ino = ialloc(T_FILE);
+  bzero(&de, sizeof(de));
+  de.d_ino = ino;
+  strcpy(de.d_name, strrchr(file, '/')+1);
+  iappend(parentino, &de, sizeof(de));
+
+  int fd = open(file, 0);
+
+  while ((cc = read(fd, buf, sizeof(buf))) > 0)
+    iappend(ino, buf, cc);
+
+  close(fd);
+}
+
+// Copy all coreutils binaries. /bin inode number should be provided
+void copy_coreutils(uint binino)
+{
+  // /bin
+  copy_file(binino, "coreutils/cat");
+  copy_file(binino, "coreutils/echo");
+  copy_file(binino, "coreutils/grep");
+  copy_file(binino, "coreutils/halt");
+  copy_file(binino, "coreutils/kill");
+  copy_file(binino, "coreutils/ln");
+  copy_file(binino, "coreutils/ls");
+  copy_file(binino, "coreutils/mkdir");
+  copy_file(binino, "coreutils/rm");
+  copy_file(binino, "coreutils/sh");
+  copy_file(binino, "coreutils/wc");
+}
+
+// Create the while Filesystem Hierarchy Standard (FHS)
+void create_fhs(uint rootino)
+{
+  uint binino = create_dir(rootino, "bin");
+  uint devino = create_dir(rootino, "dev");
+  uint homeino = create_dir(rootino, "home");
+  uint tmpino = create_dir(rootino, "tmp");
+
+  (void)devino;
+  (void)homeino;
+  (void)tmpino;
+
+  copy_coreutils(binino);
+}
+
+void create_tests(uint rootino)
+{
+  copy_file(rootino, "tests/stdlib");
+  copy_file(rootino, "tests/string");
+}
+
+void create_init(uint rootino, const char* file)
+{
+  uint sbinino = create_dir(rootino, "sbin");
+
+  copy_file(sbinino, file);
+}
+
+int main(int argc, char *argv[])
+{
+  int i;
+  uint rootino, off;
   struct dirent de;
   char buf[512];
   struct dinode din;
 
   static_assert(sizeof(int) == 4, "Integers must be 4 bytes!");
 
-  if(argc < 2){
-    fprintf(stderr, "Usage: mkfs fs.img files...\n");
+  if(argc != 3)
+  {
+    fprintf(stderr, "Usage: mkfs.xv6 <image name> <test|release>\n");
     exit(1);
   }
 
@@ -123,28 +217,16 @@ main(int argc, char *argv[])
   strcpy(de.d_name, "..");
   iappend(rootino, &de, sizeof(de));
 
-  for(i = 2; i < argc; i++){
-    if((fd = open(argv[i], 0)) < 0){
-      perror(argv[i]);
-      exit(1);
-    }
-    
-    const char* basename = argv[i] + strlen(argv[i]);
-    while (basename>=argv[i] && *basename!='/')
-      --basename;
-    ++basename;
-
-    inum = ialloc(T_FILE);
-
-    bzero(&de, sizeof(de));
-    de.d_ino = xshort(inum);
-    strncpy(de.d_name, basename, NAME_MAX);
-    iappend(rootino, &de, sizeof(de));
-
-    while((cc = read(fd, buf, sizeof(buf))) > 0)
-      iappend(inum, buf, cc);
-
-    close(fd);
+  if (!strcmp(argv[2], "release"))
+  {
+    create_fhs(rootino);
+    create_init(rootino, "coreutils/init");
+  }
+  else if (!strcmp(argv[2], "test"))
+  {
+    create_fhs(rootino);
+    create_tests(rootino);
+    create_init(rootino, "tests/init");
   }
 
   // fix size of root inode dir
@@ -159,8 +241,7 @@ main(int argc, char *argv[])
   exit(0);
 }
 
-void
-wsect(uint sec, void *buf)
+void wsect(uint sec, void *buf)
 {
   if(lseek(fsfd, sec * 512L, 0) != sec * 512L){
     perror("lseek");
@@ -172,8 +253,7 @@ wsect(uint sec, void *buf)
   }
 }
 
-uint
-i2b(uint inum)
+uint i2b(uint inum)
 {
   return (inum / IPB) + 2;
 }
@@ -192,8 +272,7 @@ winode(uint inum, struct dinode *ip)
   wsect(bn, buf);
 }
 
-void
-rinode(uint inum, struct dinode *ip)
+void rinode(uint inum, struct dinode *ip)
 {
   char buf[512];
   uint bn;
@@ -205,8 +284,7 @@ rinode(uint inum, struct dinode *ip)
   *ip = *dip;
 }
 
-void
-rsect(uint sec, void *buf)
+void rsect(uint sec, void *buf)
 {
   if(lseek(fsfd, sec * 512L, 0) != sec * 512L){
     perror("lseek");
@@ -219,8 +297,7 @@ rsect(uint sec, void *buf)
   }
 }
 
-uint
-ialloc(ushort type)
+uint ialloc(ushort type)
 {
   uint inum = freeinode++;
   struct dinode din;
@@ -233,8 +310,7 @@ ialloc(ushort type)
   return inum;
 }
 
-void
-balloc(int used)
+void balloc(int used)
 {
   uchar buf[512];
   int i;
@@ -253,8 +329,7 @@ balloc(int used)
 
 #define min(a, b) ((a) < (b) ? (a) : (b))
 
-void
-iappend(uint inum, void *xp, int n)
+void iappend(uint inum, void *xp, int n)
 {
   char *p = (char*)xp;
   uint fbn, off, n1;
@@ -301,3 +376,4 @@ iappend(uint inum, void *xp, int n)
   din.size = xint(off);
   winode(inum, &din);
 }
+

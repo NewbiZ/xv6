@@ -51,12 +51,11 @@ motd:
 	@echo -n "\033[0m"
 
 distrib.img: motd mkfs.xv6 $(DISTRIB_COREUTILS)
-	$(LOG_CMD) ./mkfs.xv6 distrib.img $(DISTRIB_COREUTILS)
+	$(LOG_CMD) ./mkfs.xv6 distrib.img release
 	@echo "\033[32;1mCreated distribution disk image "\""$@"\""\033[0m"
 
 distrib_check.img: motd mkfs.xv6 $(DISTRIB_COREUTILS) $(DISTRIB_ULIBC_TESTS)
-	$(LOG_CMD) ./mkfs.xv6 distrib_check.img \
-		$(DISTRIB_ULIBC_TESTS)
+	$(LOG_CMD) ./mkfs.xv6 distrib_check.img test
 	@echo "\033[32;1mCreated test distribution disk image "\""$@"\""\033[0m"
 
 mkfs.xv6: mkfs/mkfs.xv6.c
