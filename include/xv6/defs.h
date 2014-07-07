@@ -14,6 +14,9 @@ struct buf*     bread(uint, uint);
 void            brelse(struct buf*);
 void            bwrite(struct buf*);
 
+// devices.c
+void            devinit(void);
+
 // console.c
 void            consoleinit(void);
 void            cprintf(char*, ...);

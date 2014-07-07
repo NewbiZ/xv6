@@ -2,6 +2,9 @@
 #include <ulibc/stdio.h>
 
 #include <xv6/fcntl.h>
+#include <xv6/types.h>
+#include <xv6/fs.h>
+#include <xv6/file.h>
 
 void run_test(char* file)
 {
@@ -23,13 +26,24 @@ void run_test(char* file)
     __ulibc_printf(1, "zombie!\n");
 }
 
-int main(void)
+void setup_devices(void)
 {
-  if (open("/dev/console", O_RDWR) < 0)
+  if(open("/dev/console", O_RDWR) < 0)
   {
-    mknod("/dev/console", 1, 1);
+    mknod("/dev/console", DEV_CONSOLE, 1);
     open("/dev/console", O_RDWR);
   }
+
+  if(open("/dev/null", O_RDWR) < 0)
+    mknod("/dev/null", DEV_NULL, 1);
+
+  if(open("/dev/zero", O_RDWR) < 0)
+    mknod("/dev/zero", DEV_ZERO, 1);
+}
+
+int main(void)
+{
+  setup_devices();
 
   dup(0);  // stdout
   dup(0);  // stderr

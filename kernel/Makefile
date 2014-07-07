@@ -3,7 +3,6 @@ COMPONENT = KERNEL
 include $(TOP_SRCDIR)/Makefile.common
 
 KERNEL_OBJS = \
-	console.o   \
 	exec.o      \
 	file.o      \
 	ioapic.o    \

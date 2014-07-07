@@ -8,9 +8,10 @@ ALL_KERNEL_OBJS =          \
 	boot/kernel_boot.o       \
 	vmm/kernel_vmm.o         \
 	drivers/kernel_drivers.o \
+	devices/kernel_devices.o \
 
 .PHONY: all motd kernel distrib distrib_check kerneldisk
-.PRECIOUS: boot/%.o drivers/acpi/%.o drivers/serial/%.o drivers/keyboard/%.o drivers/ide/%.o kernel/%.o fs/%.o vmm/%.o
+.PRECIOUS: boot/%.o drivers/acpi/%.o drivers/serial/%.o drivers/keyboard/%.o drivers/ide/%.o kernel/%.o fs/%.o vmm/%.o devices/*.o
 
 all: motd kerneldisk distrib
 
@@ -56,6 +57,7 @@ $(ALL_KERNEL_OBJS):
 	$(LOG_MAKE) -C boot
 	$(LOG_MAKE) -C vmm
 	$(LOG_MAKE) -C drivers
+	$(LOG_MAKE) -C devices
 
 qemu: distrib/distrib.img disk.img
 	$(LOG_CMD) $(QEMU) -serial mon:stdio -hdb distrib/distrib.img disk.img -smp 2 -m 512 $(QEMUEXTRA)
@@ -71,3 +73,4 @@ clean:
 	$(LOG_MAKE) -C fs clean
 	$(LOG_MAKE) -C drivers clean
 	$(LOG_MAKE) -C boot clean
+	$(LOG_MAKE) -C devices clean

@@ -352,14 +352,13 @@ consolewrite(struct inode *ip, char *buf, int n)
   return n;
 }
 
-void
-consoleinit(void)
+void dev_console_init(void)
 {
   initlock(&cons.lock, "console");
   initlock(&input.lock, "input");
 
-  devsw[CONSOLE].write = consolewrite;
-  devsw[CONSOLE].read = consoleread;
+  devsw[DEV_CONSOLE].write = consolewrite;
+  devsw[DEV_CONSOLE].read = consoleread;
   cons.locking = 1;
 
   picenable(IRQ_KBD);
