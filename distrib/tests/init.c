@@ -39,6 +39,9 @@ void setup_devices(void)
 
   if(open("/dev/zero", O_RDWR) < 0)
     mknod("/dev/zero", DEV_ZERO, 1);
+
+  link("/dev/console", "/dev/tty");
+  link("/dev/console", "/dev/tty0");
 }
 
 int main(void)
