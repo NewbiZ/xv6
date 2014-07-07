@@ -288,17 +288,33 @@ sys_open(void)
 
   if(argstr(0, &path) < 0 || argint(1, &omode) < 0)
     return -1;
-  if(omode & O_CREATE){
+  
+  // Do not attempt to create device nodes!
+  if ((ip = namei(path)) != 0)
+  {
+    ilock(ip);
+    if (ip->type == T_DEV)
+      omode &= ~O_CREATE;
+    iunlockput(ip);
+  }
+
+  // We were asked to create the file
+  if(omode & O_CREATE)
+  {
     begin_trans();
     ip = create(path, T_FILE, 0, 0);
     commit_trans();
     if(ip == 0)
       return -1;
-  } else {
+  }
+  // Do not attempt to create the file
+  else
+  {
     if((ip = namei(path)) == 0)
       return -1;
     ilock(ip);
-    if(ip->type == T_DIR && omode != O_RDONLY){
+    if(ip->type == T_DIR && omode != O_RDONLY)
+    {
       iunlockput(ip);
       return -1;
     }
