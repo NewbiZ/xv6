@@ -12,8 +12,7 @@ int dev_zero_read(struct inode *ip, char *dst, int n)
 
 int dev_zero_write(struct inode *ip, char *buf, int n)
 {
-  // Cannot write to /dev/zero
-  return 0;
+  return n;
 }
 
 void dev_zero_init(void)
