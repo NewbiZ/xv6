@@ -44,3 +44,15 @@ struct dinode {
 
 // Block containing bit for block b
 #define BBLOCK(b, ninodes) (b/BPB + (ninodes)/IPB + 3)
+
+#define MAX_FS 16
+
+struct filesystem_type
+{
+  const char* name;
+  int flags;
+
+};
+
+void register_filesystem(struct filesystem_type* fst);
+

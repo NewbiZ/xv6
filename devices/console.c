@@ -149,6 +149,8 @@ void splash(void)
   outb(CRTPORT+1, 7);
   outb(CRTPORT, 15);
   outb(CRTPORT+1, 127);
+  consputc('\n');
+  consputc('\n');
 }
 
 static void
