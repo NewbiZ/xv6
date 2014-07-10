@@ -162,6 +162,11 @@ void process_line(char* buf)
     __ulibc_printf(2, "cwd: %s\n", cwd);
     return;
   }
+  // $ # Skip comments
+  if (buf[0]=='#')
+  {
+    return;
+  }
   // $ <everything else>
   if(fork1() == 0)
     runcmd(parsecmd(buf));
