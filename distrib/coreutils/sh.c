@@ -143,13 +143,80 @@ getcmd(char *buf, int nbuf)
   return 0;
 }
 
-int
-main(void)
+void process_line(char* buf)
+{
+  static char cwd[256];
+  // $ cd <path>
+  if (buf[0] == 'c' && buf[1] == 'd' && buf[2] == ' '){
+    // Clumsy but will have to do for now.
+    // Chdir has no effect on the parent if run in the child.
+    buf[__ulibc_strlen(buf)-1] = 0;  // chop \n
+    if(chdir(buf+3) < 0)
+      __ulibc_printf(2, "cannot cd %s\n", buf+3);
+    return;
+  }
+  // $ pwd
+  if (buf[0] == 'p' && buf[1] == 'w' && buf[2] == 'd' && buf[3] == '\n'){
+    if (getcwd(cwd, sizeof(cwd)) < 0)
+      panic("cannot retrieve cwd");
+    __ulibc_printf(2, "cwd: %s\n", cwd);
+    return;
+  }
+  // $ <everything else>
+  if(fork1() == 0)
+    runcmd(parsecmd(buf));
+  wait();
+}
+
+void run_interactive(void)
 {
   static char buf[256];
-  static char cwd[256];
+
+  while (getcmd(buf, sizeof(buf)) >= 0){
+    process_line(buf);
+  }
+}
+
+void run_fromfile(char* filename)
+{
   int fd;
-  
+  static char buf[512];
+  size_t pos = 0;
+  char c;
+
+  if ((fd = open(filename, O_RDONLY)) < 0)
+  {
+    __ulibc_printf(2, "error: cannot open \"%s\".\n", filename);
+    sysexit();
+  }
+
+  while (read(fd, &c, 1)==1)
+  {
+    if (c!='\n')
+    {
+      buf[pos++] = c;
+    }
+    else
+    {
+      buf[pos++] = 0;
+      process_line(buf);
+      pos = 0;
+    }
+  }
+  if (pos>0)
+  {
+    buf[pos] = 0;
+    process_line(buf);
+  }
+
+  close(fd);
+}
+
+int
+main(int argc, char** argv)
+{
+  int fd;
+
   // Assumes three file descriptors open.
   while((fd = open("/dev/console", O_RDWR)) >= 0){
     if (fd >= 3)
@@ -158,30 +225,12 @@ main(void)
       break;
     }
   }
-  
-  // Read and run input commands.
-  while (getcmd(buf, sizeof(buf)) >= 0){
-    // $ cd <path>
-    if (buf[0] == 'c' && buf[1] == 'd' && buf[2] == ' '){
-      // Clumsy but will have to do for now.
-      // Chdir has no effect on the parent if run in the child.
-      buf[__ulibc_strlen(buf)-1] = 0;  // chop \n
-      if(chdir(buf+3) < 0)
-        __ulibc_printf(2, "cannot cd %s\n", buf+3);
-      continue;
-    }
-    // $ pwd
-    if (buf[0] == 'p' && buf[1] == 'w' && buf[2] == 'd' && buf[3] == '\n'){
-        if (getcwd(cwd, sizeof(cwd)) < 0)
-          panic("cannot retrieve cwd");
-        __ulibc_printf(2, "cwd: %s\n", cwd);
-        continue;
-    }
-    // $ <everything else>
-    if(fork1() == 0)
-      runcmd(parsecmd(buf));
-    wait();
-  }
+
+  if (argc<2)
+    run_interactive();
+  else
+    run_fromfile(argv[1]);
+
   sysexit();
 }
 
