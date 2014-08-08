@@ -58,7 +58,6 @@ struct cmd *parsecmd(char*);
   X("cd ",      builtin_cd)      \
   X("pwd\n",    builtin_pwd)     \
   X("exit\n",   builtin_exit)    \
-  X("logout\n", builtin_exit)    \
   X("#",        builtin_comment)
 
 #define X(builtin, handler) void handler(char*);
@@ -88,6 +87,7 @@ void builtin_cd(char* buffer)
 
 void builtin_exit(char* buffer)
 {
+  sysexit();
 }
 
 void builtin_pwd(char* buffer)
