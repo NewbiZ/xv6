@@ -54,6 +54,70 @@ int fork1(void);  // Fork but panics on failure.
 void panic(char*);
 struct cmd *parsecmd(char*);
 
+#define BUILTIN_LIST             \
+  X("cd ",      builtin_cd)      \
+  X("pwd\n",    builtin_pwd)     \
+  X("exit\n",   builtin_exit)    \
+  X("logout\n", builtin_exit)    \
+  X("#",        builtin_comment)
+
+#define X(builtin, handler) void handler(char*);
+BUILTIN_LIST
+#undef X
+
+static const char* builtins[] = {
+#define X(builtin, handler) builtin,
+  BUILTIN_LIST
+#undef X
+};
+
+static void (*handlers[])(char*) = {
+#define X(builtin, handler) handler,
+  BUILTIN_LIST
+#undef X
+};
+
+void builtin_cd(char* buffer)
+{
+  // Clumsy but will have to do for now.
+  // Chdir has no effect on the parent if run in the child.
+  buffer[__ulibc_strlen(buffer)-1] = 0;  // chop \n
+  if(chdir(buffer+3) < 0)
+    __ulibc_printf(2, "cannot cd %s\n", buffer+3);
+}
+
+void builtin_exit(char* buffer)
+{
+}
+
+void builtin_pwd(char* buffer)
+{
+  static char cwd[256];
+  if (getcwd(cwd, sizeof(cwd)) < 0)
+    panic("cannot retrieve cwd");
+  __ulibc_printf(2, "cwd: %s\n", cwd);
+}
+
+void builtin_comment(char* buffer)
+{
+  // Do nothing
+  return;
+}
+
+int handle_builtin(char* buffer)
+{
+  unsigned int i = 0;
+  for (; i<sizeof(builtins)/sizeof(const char*); ++i)
+  {
+    if (!strncmp(buffer, builtins[i], strlen(builtins[i])))
+    {
+      (*handlers[i])(buffer);
+      return 1;
+    }
+  }
+  return 0;
+}
+
 // Execute cmd.  Never returns.
 void
 runcmd(struct cmd *cmd)
@@ -132,8 +196,7 @@ runcmd(struct cmd *cmd)
   sysexit();
 }
 
-int
-getcmd(char *buf, int nbuf)
+int getcmd(char *buf, int nbuf)
 {
   __ulibc_printf(2, "$ ");
   __ulibc_memset(buf, 0, nbuf);
@@ -145,32 +208,12 @@ getcmd(char *buf, int nbuf)
 
 void process_line(char* buf)
 {
-  static char cwd[256];
-  // $ cd <path>
-  if (buf[0] == 'c' && buf[1] == 'd' && buf[2] == ' '){
-    // Clumsy but will have to do for now.
-    // Chdir has no effect on the parent if run in the child.
-    buf[__ulibc_strlen(buf)-1] = 0;  // chop \n
-    if(chdir(buf+3) < 0)
-      __ulibc_printf(2, "cannot cd %s\n", buf+3);
-    return;
-  }
-  // $ pwd
-  if (buf[0] == 'p' && buf[1] == 'w' && buf[2] == 'd' && buf[3] == '\n'){
-    if (getcwd(cwd, sizeof(cwd)) < 0)
-      panic("cannot retrieve cwd");
-    __ulibc_printf(2, "cwd: %s\n", cwd);
-    return;
-  }
-  // $ # Skip comments
-  if (buf[0]=='#')
+  if (!handle_builtin(buf))
   {
-    return;
+    if(fork1() == 0)
+      runcmd(parsecmd(buf));
+    wait();
   }
-  // $ <everything else>
-  if(fork1() == 0)
-    runcmd(parsecmd(buf));
-  wait();
 }
 
 void run_interactive(void)
