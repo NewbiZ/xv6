@@ -156,6 +156,11 @@ void copy_sysutils(int sbinino, const char* initfile)
   copy_file(sbinino, initfile);
 }
 
+void copy_conf(int etcino)
+{
+  copy_file(etcino, "coreutils/rc.local");
+}
+
 // Create the while Filesystem Hierarchy Standard (FHS)
 void create_fhs(uint rootino, const char* initfile)
 {
@@ -217,6 +222,7 @@ void create_fhs(uint rootino, const char* initfile)
 
   copy_coreutils(binino);
   copy_sysutils(sbinino, initfile);
+  copy_conf(etcino);
 }
 
 void create_tests(uint rootino)

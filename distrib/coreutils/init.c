@@ -24,30 +24,80 @@ void setup_devices(void)
 
   link("/dev/console", "/dev/tty");
   link("/dev/console", "/dev/tty0");
+
+  dup(0);  // stdout
+  dup(0);  // stderr
+}
+
+void run_rclocal(void)
+{
+  int pid;
+  int wpid;
+  static char* args[] = {
+    "/bin/sh",
+    "/etc/rc.local"
+  };
+
+  if (open("/etc/rc.local", O_RDONLY))
+  {
+    pid = fork();
+
+    if (pid<0)
+    {
+      __ulibc_printf(1, "[init] failed to fork shell for rc.local\n");
+      sysexit();
+    }
+
+    if (pid==0)
+    {
+      __ulibc_printf(1, "[init] executing rc.local\n");
+      exec("/bin/sh", args);
+    }
+
+    while((wpid=wait()) >= 0 && wpid != pid)
+    {
+      __ulibc_printf(1, "[init] zombie while executing rc.local\n");
+    }
+  }
+}
+
+void run_shell(void)
+{
+  int pid;
+  int wpid;
+
+  for (;;)
+  {
+    pid = fork();
+
+    if (pid<0)
+    {
+      __ulibc_printf(1, "[init] shell fork failed\n");
+      sysexit();
+    }
+
+    if ( pid==0)
+    {
+      __ulibc_printf(1, "[init] starting shell\n");
+      exec("/bin/sh", argv);
+      __ulibc_printf(1, "[init] executing shell failed\n");
+      sysexit();
+    }
+
+    while ((wpid=wait())>=0 && wpid!=pid)
+    {
+      __ulibc_printf(1, "[init] zombie while executing shell\n");
+    }
+  }
 }
 
 int main(void)
 {
-  int pid, wpid;
-
   setup_devices();
 
-  dup(0);  // stdout
-  dup(0);  // stderr
+  run_rclocal();
 
-  for(;;){
-    __ulibc_printf(1, "init: starting sh\n");
-    pid = fork();
-    if(pid < 0){
-      __ulibc_printf(1, "init: fork failed\n");
-      sysexit();
-    }
-    if(pid == 0){
-      exec("/bin/sh", argv);
-      __ulibc_printf(1, "init: exec sh failed\n");
-      sysexit();
-    }
-    while((wpid=wait()) >= 0 && wpid != pid)
-      __ulibc_printf(1, "zombie!\n");
-  }
+  run_shell();
+
+  return 0;
 }
