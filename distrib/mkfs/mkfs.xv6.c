@@ -270,7 +270,7 @@ int main(int argc, char *argv[])
   usedblocks = ninodes / IPB + 3 + bitblocks;
   freeblock = usedblocks;
 
-  if (1)
+  if (0)
   {
     printf("used %d (bit %d ninode %zu) free %u log %u total %d\n", usedblocks,
            bitblocks, ninodes/IPB + 1, freeblock, nlog, nblocks+usedblocks+nlog);

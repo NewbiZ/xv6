@@ -30,21 +30,13 @@ log_cmd_verbose_ = $(log_cmd_verbose_1)
 log_cmd_verbose_0 = @echo -n;
 log_cmd_verbose_1 = 
 
-QEMU = qemu
-
 CC = gcc
 
 AS = gas
 
 LD = ld
 
-OBJCOPY = objcopy
-
-OBJDUMP = objdump
-
 RM = rm
-
-CHMOD = chmod
 
 ASFLAGS =                         \
 	-m32                          \
