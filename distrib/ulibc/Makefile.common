@@ -46,6 +46,13 @@ RM = rm
 
 CHMOD = chmod
 
+ASFLAGS =                         \
+	-m32                          \
+	-gdwarf-2                     \
+	-Wa,-divide                   \
+	-I$(TOP_SRCDIR)/include       \
+	-I$(TOP_SRCDIR)/../../include \
+
 CFLAGS =                          \
 	-fno-pic                      \
 	-static                       \
@@ -58,8 +65,8 @@ CFLAGS =                          \
 	-fno-stack-protector          \
 	-fno-pic                      \
 	-nostdinc                     \
-	-I$(TOP_SRCDIR)/../include    \
-	-I$(TOP_SRCDIR)/ulibc/include \
+	-I$(TOP_SRCDIR)/include       \
+	-I$(TOP_SRCDIR)/../../include \
 
 LDFLAGS =     \
   -m elf_i386 \

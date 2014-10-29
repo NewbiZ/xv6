@@ -1,7 +1,7 @@
 #include <ulibc/ulibc.h>
-#include <../../include/xv6/stat.h>
-#include <../../include/xv6/fcntl.h>
-#include <../../include/xv6/x86.h>
+#include <xv6/stat.h>
+#include <xv6/fcntl.h>
+#include <xv6/x86.h>
 
 char*
 __ulibc_strcpy(char *s, char *t)

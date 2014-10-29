@@ -1,5 +1,5 @@
-#include <../../include/xv6/syscall.h>
-#include <../../include/xv6/traps.h>
+#include <xv6/syscall.h>
+#include <xv6/traps.h>
 
 #define SYSCALL(name) \
   .globl name; \
