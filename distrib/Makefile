@@ -219,6 +219,7 @@ mkfs.xv6: mkfs/mkfs.xv6.c
 
 coreutils/%: coreutils/%.o $(DISTRIB_ULIBC)
 	$(LOG_LD) $(LD) $(LDFLAGS) -N -e main -Ttext 0 -o $@ $^
+	$(LOG_CMD) strip -s $@
 
 coreutils/%.o: coreutils/%.c
 	$(LOG_CC) $(CC) $(CFLAGS) -c -o $@ coreutils/$*.c
@@ -234,6 +235,7 @@ $(DISTRIB_ULIBC): $(DISTRIB_ULIBC_OBJECTS)
 
 tests/%: tests/%.o $(DISTRIB_ULIBC)
 	$(LOG_LD) $(LD) $(LDFLAGS) -N -e main -Ttext 0 -o $@ $^
+	$(LOG_CMD) strip -s $@
 
 tests/%.o: tests/%.c
 	$(LOG_CC) $(CC) $(CFLAGS) -c -o $@ tests/$*.c
@@ -247,3 +249,4 @@ clean:
 	$(LOG_CMD) $(RM) -rf ulibc/*.o
 	$(LOG_CMD) $(RM) -rf ulibc/*/*.o
 	$(LOG_CMD) $(RM) -rf tests/*.o
+	$(LOG_CMD) $(RM) -rf $(DISTRIB_ULIBC_TESTS)
