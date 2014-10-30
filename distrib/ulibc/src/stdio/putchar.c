@@ -1,9 +1,9 @@
 #include <ulibc/stdio.h>
-#include <ulibc/assert.h>
+#include <ulibc/ulibc.h>
 
 int putchar(int c)
 {
-  assert(0 && "not implemented yet.");
-  return 0;
+  write(1, &c, 1);
+  return c;
 }
 

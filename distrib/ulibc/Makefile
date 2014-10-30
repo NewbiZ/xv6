@@ -70,7 +70,7 @@ DISTRIB_ULIBC_OBJECTS =     \
 	src/stdio/getc.o        \
 	src/stdio/getchar.o     \
 	src/stdio/gets.o        \
-	src/stdio/int.o         \
+	src/stdio/ftell.o       \
 	src/stdio/perror.o      \
 	src/stdio/printf.o      \
 	src/stdio/putc.o        \
