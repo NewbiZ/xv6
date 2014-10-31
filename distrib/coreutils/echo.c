@@ -7,14 +7,10 @@ main(int argc, char *argv[])
   int i;
 
   if (argc<2)
-  {
-    __ulibc_printf(1, "\n");
-  }
+    printf("\n");
 
   for(i=1; i<argc; ++i)
-  {
-    __ulibc_printf(1, "%s%s", argv[i], i+1 < argc ? " " : "\n");
-  }
+    printf("%s%s", argv[i], i+1 < argc ? " " : "\n");
 
   sysexit();
 }

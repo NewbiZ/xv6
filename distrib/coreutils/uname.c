@@ -1,80 +1,81 @@
 #include <ulibc/ulibc.h>
+#include <ulibc/stdio.h>
 #include <ulibc/string.h>
 #include <ulibc/stdlib.h>
 
 void print_kernel_name()
 {
-  __ulibc_printf(1, "Xv6 ");
+  printf("Xv6 ");
 }
 
 void print_node_name()
 {
-  __ulibc_printf(1, "localhost ");
+  printf("localhost ");
 }
 
 void print_kernel_release()
 {
-  __ulibc_printf(1, "0.1 ");
+  printf("0.1 ");
 }
 
 void print_kernel_version()
 {
-  __ulibc_printf(1, "yolo ");
+  printf("yolo ");
 }
 
 void print_machine()
 {
-  __ulibc_printf(1, "i386 ");
+  printf("i386 ");
 }
 
 void print_processor()
 {
-  __ulibc_printf(1, "i386 ");
+  printf("i386 ");
 }
 
 void print_hardware_platform()
 {
-  __ulibc_printf(1, "i386 ");
+  printf("i386 ");
 }
 
 void print_operating_system()
 {
-  __ulibc_printf(1, "Xv6 ");
+  printf("Xv6 ");
 }
 
 void print_version()
 {
-  __ulibc_printf(1, "uname (Xv6 coreutils) 0.1\n");
-  __ulibc_printf(1, "Written by Aurelien Vallee.\n");
+  printf("uname (Xv6 coreutils) 0.1\n");
+  printf("Written by Aurelien Vallee.\n");
   sysexit();
 }
 
 void print_help()
 {
-  __ulibc_printf(1, "Usage: uname [OPTIONS] [--help] [--version]\n");
-  __ulibc_printf(1, "\n");
-  __ulibc_printf(1, "-a, --all               ");
-  __ulibc_printf(1, "print all information, except -p and -i.\n");
-  __ulibc_printf(1, "-s, --kernel-name       ");
-  __ulibc_printf(1, "print the kernel name\n");
-  __ulibc_printf(1, "-n, --node-name         ");
-  __ulibc_printf(1, "print the network node name\n");
-  __ulibc_printf(1, "-r, --kernel-release    ");
-  __ulibc_printf(1, "print the kernel release\n");
-  __ulibc_printf(1, "-v, --kernel-version    ");
-  __ulibc_printf(1, "print the kernel version\n");
-  __ulibc_printf(1, "-m, --machine           ");
-  __ulibc_printf(1, "print the machine hardware name\n");
-  __ulibc_printf(1, "-p, --processor         ");
-  __ulibc_printf(1, "print the processor type or \"unknown\"\n");
-  __ulibc_printf(1, "-i, --hardware-platform ");
-  __ulibc_printf(1, "print the hardware platform or \"unknown\"\n");
-  __ulibc_printf(1, "-o, --operating-system  ");
-  __ulibc_printf(1, "print the operating system\n");
-  __ulibc_printf(1, "    --help              ");
-  __ulibc_printf(1, "display this help and exit\n");
-  __ulibc_printf(1, "    --version           ");
-  __ulibc_printf(1, "display version information and exit\n");
+  printf("Usage: uname [OPTIONS] [--help] [--version]\n");
+  printf("\n");
+  printf("-a, --all               ");
+  printf("print all information, except -p and -i.\n");
+  printf("-s, --kernel-name       ");
+  printf("print the kernel name\n");
+  printf("-n, --node-name         ");
+  printf("print the network node name\n");
+  printf("-r, --kernel-release    ");
+  printf("print the kernel release\n");
+  printf("-v, --kernel-version    ");
+  printf("print the kernel version\n");
+  printf("-m, --machine           ");
+  printf("print the machine hardware name\n");
+  printf("-p, --processor         ");
+  printf("print the processor type or \"unknown\"\n");
+  printf("-i, --hardware-platform ");
+  printf("print the hardware platform or \"unknown\"\n");
+  printf("-o, --operating-system  ");
+  printf("print the operating system\n");
+  printf("    --help              ");
+  printf("display this help and exit\n");
+  printf("    --version           ");
+  printf("display version information and exit\n");
   sysexit();
 }
 
@@ -179,7 +180,7 @@ int main(int argc, char** argv)
   if (args & OPERATING_SYSTEM)
     print_operating_system();
 
-  __ulibc_printf(1, "\n");
+  printf("\n");
 
   sysexit();
   return 0;

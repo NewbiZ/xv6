@@ -82,7 +82,7 @@ void builtin_cd(char* buffer)
   // Chdir has no effect on the parent if run in the child.
   buffer[strlen(buffer)-1] = 0;  // chop \n
   if(chdir(buffer+3) < 0)
-    __ulibc_printf(2, "cannot cd %s\n", buffer+3);
+    fprintf(stderr, "cannot cd %s\n", buffer+3);
 }
 
 void builtin_exit(char* buffer)
@@ -95,7 +95,7 @@ void builtin_pwd(char* buffer)
   static char cwd[256];
   if (getcwd(cwd, sizeof(cwd)) < 0)
     panic("cannot retrieve cwd");
-  __ulibc_printf(2, "cwd: %s\n", cwd);
+  fprintf(stderr, "cwd: %s\n", cwd);
 }
 
 void builtin_comment(char* buffer)
@@ -142,14 +142,14 @@ runcmd(struct cmd *cmd)
       sysexit();
     exec(ecmd->argv[0], ecmd->argv);
     free(ecmd->argv[0]);
-    __ulibc_printf(2, "exec %s failed\n", ecmd->argv[0]);
+    fprintf(stderr, "exec %s failed\n", ecmd->argv[0]);
     break;
 
   case REDIR:
     rcmd = (struct redircmd*)cmd;
     close(rcmd->fd);
     if(open(rcmd->file, rcmd->mode) < 0){
-      __ulibc_printf(2, "open %s failed\n", rcmd->file);
+      fprintf(stderr, "open %s failed\n", rcmd->file);
       sysexit();
     }
     runcmd(rcmd->cmd);
@@ -198,7 +198,7 @@ runcmd(struct cmd *cmd)
 
 int getcmd(char *buf, int nbuf)
 {
-  __ulibc_printf(2, "$ ");
+  fprintf(stderr, "$ ");
   memset(buf, 0, nbuf);
   __ulibc_gets(buf, nbuf);
   if(buf[0] == 0) // EOF
@@ -234,7 +234,7 @@ void run_fromfile(char* filename)
 
   if ((fd = open(filename, O_RDONLY)) < 0)
   {
-    __ulibc_printf(2, "error: cannot open \"%s\".\n", filename);
+    fprintf(stderr, "error: cannot open \"%s\".\n", filename);
     sysexit();
   }
 
@@ -285,7 +285,7 @@ main(int argc, char** argv)
 void
 panic(char *s)
 {
-  __ulibc_printf(2, "%s\n", s);
+  fprintf(stderr, "%s\n", s);
   sysexit();
 }
 
@@ -445,7 +445,7 @@ parsecmd(char *s)
   cmd = parseline(&s, es);
   peek(&s, es, "");
   if(s != es){
-    __ulibc_printf(2, "leftovers: %s\n", s);
+    fprintf(stderr, "leftovers: %s\n", s);
     panic("syntax");
   }
   nulterminate(cmd);

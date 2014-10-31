@@ -12,18 +12,18 @@ void run_test(char* file)
   pid = fork();
   if (pid<0)
   {
-    __ulibc_printf(2, "init: fork failed\n");
+    fprintf(stderr, "init: fork failed\n");
     sysexit();
   }
   if (pid==0)
   {
     char* argv[] = {file, 0};
-    __ulibc_printf(1, "Running test suite: %s\n", file);
+    printf("Running test suite: %s\n", file);
     exec(file, argv);
   }
   int wpid;
   while ((wpid=wait())>=0 && wpid!=pid)
-    __ulibc_printf(1, "zombie!\n");
+    printf("zombie!\n");
 }
 
 void setup_devices(void)

@@ -44,19 +44,19 @@ void run_rclocal(void)
 
     if (pid<0)
     {
-      __ulibc_printf(1, "[init] failed to fork shell for rc.local\n");
+      printf("[init] failed to fork shell for rc.local\n");
       sysexit();
     }
 
     if (pid==0)
     {
-      __ulibc_printf(1, "[init] executing rc.local\n");
+      printf("[init] executing rc.local\n");
       exec("/bin/sh", args);
     }
 
     while((wpid=wait()) >= 0 && wpid != pid)
     {
-      __ulibc_printf(1, "[init] zombie while executing rc.local\n");
+      printf("[init] zombie while executing rc.local\n");
     }
   }
 }
@@ -72,21 +72,21 @@ void run_shell(void)
 
     if (pid<0)
     {
-      __ulibc_printf(1, "[init] shell fork failed\n");
+      printf("[init] shell fork failed\n");
       sysexit();
     }
 
     if ( pid==0)
     {
-      __ulibc_printf(1, "[init] starting shell\n");
+      printf("[init] starting shell\n");
       exec("/bin/sh", argv);
-      __ulibc_printf(1, "[init] executing shell failed\n");
+      printf("[init] executing shell failed\n");
       sysexit();
     }
 
     while ((wpid=wait())>=0 && wpid!=pid)
     {
-      __ulibc_printf(1, "[init] zombie while executing shell\n");
+      printf("[init] zombie while executing shell\n");
     }
   }
 }

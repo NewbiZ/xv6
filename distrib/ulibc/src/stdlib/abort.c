@@ -2,12 +2,12 @@
 
 #include <ulibc/ulibc.h>
 #include <ulibc/ctype.h>
-#include <ulibc/assert.h>
+#include <ulibc/stdio.h>
 
 void abort(void)
 {
   //TODO
-  __ulibc_printf(2, "Abort.\n");
+  fprintf(stderr, "Abort.\n");
   sysexit();
 }
 

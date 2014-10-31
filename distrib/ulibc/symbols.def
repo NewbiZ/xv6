@@ -1,5 +1,4 @@
 __ulibc_gets
-__ulibc_printf
 __ulibc_stat
 abort
 abs

@@ -35,24 +35,24 @@ ls(char *path)
   struct stat st;
   
   if((fd = open(path, 0)) < 0){
-    __ulibc_printf(2, "ls: cannot open %s\n", path);
+    fprintf(stderr, "ls: cannot open %s\n", path);
     return;
   }
   
   if(fstat(fd, &st) < 0){
-    __ulibc_printf(2, "ls: cannot stat %s\n", path);
+    fprintf(stderr, "ls: cannot stat %s\n", path);
     close(fd);
     return;
   }
   
   switch(st.type){
   case T_FILE:
-    __ulibc_printf(1, "%s %d %d %d\n", fmtname(path), st.type, st.ino, st.size);
+    printf("%s %d %d %d\n", fmtname(path), st.type, st.ino, st.size);
     break;
   
   case T_DIR:
     if(strlen(path) + 1 + NAME_MAX + 1 > sizeof buf){
-      __ulibc_printf(2, "ls: path too long\n");
+      fprintf(stderr, "ls: path too long\n");
       break;
     }
     strcpy(buf, path);
@@ -64,10 +64,10 @@ ls(char *path)
       memmove(p, de.d_name, NAME_MAX);
       p[NAME_MAX] = 0;
       if(__ulibc_stat(buf, &st) < 0){
-        __ulibc_printf(2, "ls: cannot stat %s\n", buf);
+        fprintf(stderr, "ls: cannot stat %s\n", buf);
         continue;
       }
-      __ulibc_printf(1, "%s %d %d %d\n", fmtname(buf), st.type, st.ino, st.size);
+      printf("%s %d %d %d\n", fmtname(buf), st.type, st.ino, st.size);
     }
     break;
   }
