@@ -294,12 +294,12 @@ sys_open(void)
   {
     ilock(ip);
     if (ip->type == T_DEV)
-      omode &= ~O_CREATE;
+      omode &= ~O_CREAT;
     iunlockput(ip);
   }
 
   // We were asked to create the file
-  if(omode & O_CREATE)
+  if(omode & O_CREAT)
   {
     begin_trans();
     ip = create(path, T_FILE, 0, 0);

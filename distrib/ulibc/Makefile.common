@@ -38,19 +38,20 @@ LD = ld
 
 RM = rm
 
-ASFLAGS =                         \
+ASFLAGS =                       \
 	-m32                          \
 	-gdwarf-2                     \
 	-Wa,-divide                   \
 	-I$(TOP_SRCDIR)/include       \
 	-I$(TOP_SRCDIR)/../../include \
 
-CFLAGS =                          \
+CFLAGS =                        \
 	-fno-pic                      \
 	-static                       \
 	-fno-builtin                  \
 	-fno-strict-aliasing          \
 	-Wall                         \
+	-Werror                       \
 	-ggdb                         \
 	-m32                          \
 	-fno-omit-frame-pointer       \

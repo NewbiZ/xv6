@@ -32,9 +32,11 @@ typedef unsigned int fpos_t;
 
 #define TMP_MAX 10000
 
-typedef struct {
+typedef struct __FILE {
   int    fd;
   char*  buffer;
+  char*  rd_pos;
+  char*  wr_pos;
   fpos_t read_off_beg;
   fpos_t read_off_pos;
   fpos_t read_off_end;
@@ -43,6 +45,8 @@ typedef struct {
   fpos_t write_off_end;
   int    error;
   int    eof;
+  int    mode;
+  int    flags;
 } FILE;
 
 extern FILE* const stdin;

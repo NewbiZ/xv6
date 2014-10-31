@@ -1,9 +1,8 @@
 #include <ulibc/stdio.h>
-#include <ulibc/assert.h>
 
-int fflush(FILE* stream)
+int fflush(FILE* f)
 {
-  assert(0 && "not implemented yet.");
+  // TODO: should use buffering here, depending on f->flags
   return 0;
 }
 

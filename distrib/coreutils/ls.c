@@ -1,6 +1,6 @@
 #include <ulibc/ulibc.h>
-//#include <ulibc/stdio.h>
-//#include <ulibc/string.h>
+#include <ulibc/stdio.h>
+#include <ulibc/string.h>
 
 #include <xv6/stdio.h>
 #include <xv6/dirent.h>
@@ -14,15 +14,15 @@ fmtname(char *path)
   char *p;
   
   // Find first character after last slash.
-  for(p=path+__ulibc_strlen(path); p >= path && *p != '/'; p--)
+  for(p=path+strlen(path); p >= path && *p != '/'; p--)
     ;
   p++;
   
   // Return blank-padded name.
-  if(__ulibc_strlen(p) >= NAME_MAX)
+  if(strlen(p) >= NAME_MAX)
     return p;
-  __ulibc_memmove(buf, p, __ulibc_strlen(p));
-  __ulibc_memset(buf+__ulibc_strlen(p), ' ', NAME_MAX-__ulibc_strlen(p));
+  memmove(buf, p, strlen(p));
+  memset(buf+strlen(p), ' ', NAME_MAX-strlen(p));
   return buf;
 }
 
@@ -51,17 +51,17 @@ ls(char *path)
     break;
   
   case T_DIR:
-    if(__ulibc_strlen(path) + 1 + NAME_MAX + 1 > sizeof buf){
+    if(strlen(path) + 1 + NAME_MAX + 1 > sizeof buf){
       __ulibc_printf(2, "ls: path too long\n");
       break;
     }
-    __ulibc_strcpy(buf, path);
-    p = buf+__ulibc_strlen(buf);
+    strcpy(buf, path);
+    p = buf+strlen(buf);
     *p++ = '/';
     while(read(fd, &de, sizeof(de)) == sizeof(de)){
       if(de.d_ino == 0)
         continue;
-      __ulibc_memmove(p, de.d_name, NAME_MAX);
+      memmove(p, de.d_name, NAME_MAX);
       p[NAME_MAX] = 0;
       if(__ulibc_stat(buf, &st) < 0){
         __ulibc_printf(2, "ls: cannot stat %s\n", buf);
