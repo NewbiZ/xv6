@@ -1,5 +1,5 @@
-#include <ulibc/stdio.h>
-#include <ulibc/assert.h>
+#include <stdio.h>
+#include <assert.h>
 
 FILE* freopen(const char* filename, const char* mode, FILE* stream)
 {

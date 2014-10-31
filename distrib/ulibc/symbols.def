@@ -1,5 +1,3 @@
-__ulibc_gets
-__ulibc_stat
 abort
 abs
 acos

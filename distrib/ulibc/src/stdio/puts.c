@@ -1,6 +1,6 @@
-#include <ulibc/stdio.h>
-#include <ulibc/ulibc.h>
-#include <ulibc/string.h>
+#include <stdio.h>
+#include <syscall.h>
+#include <string.h>
 
 int puts(const char* s)
 {

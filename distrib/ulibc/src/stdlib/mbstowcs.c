@@ -1,8 +1,7 @@
-#include <ulibc/stdlib.h>
-
-#include <ulibc/ulibc.h>
-#include <ulibc/ctype.h>
-#include <ulibc/assert.h>
+#include <stdlib.h>
+#include <syscall.h>
+#include <ctype.h>
+#include <assert.h>
 
 size_t mbstowcs(wchar_t* pwcs, const char* s, size_t n)
 {

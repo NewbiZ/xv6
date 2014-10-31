@@ -1,7 +1,6 @@
-#include <ulibc/string.h>
-
-#include <ulibc/stdlib.h>
-#include <ulibc/assert.h>
+#include <string.h>
+#include <stdlib.h>
+#include <assert.h>
 
 char* strtok(char* s1, const char* s2)
 {

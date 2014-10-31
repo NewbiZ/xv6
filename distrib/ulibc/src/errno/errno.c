@@ -1,4 +1,4 @@
-#include <ulibc/errno.h>
+#include <errno.h>
 
 int errno;
 

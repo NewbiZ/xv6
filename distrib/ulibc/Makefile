@@ -147,9 +147,7 @@ DISTRIB_ULIBC_OBJECTS =     \
 	src/time/mktime.o       \
 	src/time/strftime.o     \
 	src/time/time.o         \
-	src/usys.o              \
-	src/printf.o            \
-	src/ulib.o              \
+	src/syscall.o           \
 	src/umalloc.o           \
 
 .PHONY: all

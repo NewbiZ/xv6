@@ -1,5 +1,5 @@
-#include <ulibc/locale.h>
-#include <ulibc/limits.h>
+#include <locale.h>
+#include <limits.h>
 
 static struct lconv c_lconv = {
   .decimal_point     = ".",

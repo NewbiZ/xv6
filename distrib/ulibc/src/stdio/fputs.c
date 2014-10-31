@@ -1,5 +1,5 @@
-#include <ulibc/stdio.h>
-#include <ulibc/assert.h>
+#include <stdio.h>
+#include <assert.h>
 
 int fputs(const char* s, FILE* stream)
 {

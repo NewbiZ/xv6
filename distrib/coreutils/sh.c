@@ -1,7 +1,7 @@
-#include <ulibc/ulibc.h>
-#include <ulibc/stdio.h>
-#include <ulibc/string.h>
-#include <ulibc/stdlib.h>
+#include <syscall.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 
 #include <xv6/fcntl.h>
 
@@ -200,7 +200,7 @@ int getcmd(char *buf, int nbuf)
 {
   fprintf(stderr, "$ ");
   memset(buf, 0, nbuf);
-  __ulibc_gets(buf, nbuf);
+  gets(buf);
   if(buf[0] == 0) // EOF
     return -1;
   return 0;

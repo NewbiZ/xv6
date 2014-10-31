@@ -1,4 +1,4 @@
-#include <ulibc/ctype.h>
+#include <ctype.h>
 
 int islower(int c)
 {

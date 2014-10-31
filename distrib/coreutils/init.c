@@ -1,5 +1,5 @@
-#include <ulibc/ulibc.h>
-#include <ulibc/stdio.h>
+#include <syscall.h>
+#include <stdio.h>
 
 #include <xv6/fcntl.h>
 #include <xv6/types.h>

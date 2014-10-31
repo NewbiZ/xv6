@@ -1,11 +1,11 @@
 #include <xv6/syscall.h>
 #include <xv6/traps.h>
 
-#define SYSCALL(name) \
-  .globl name; \
-  name: \
+#define SYSCALL(name)         \
+  .globl name;                \
+  name:                       \
     movl $SYS_ ## name, %eax; \
-    int $T_SYSCALL; \
+    int $T_SYSCALL;           \
     ret
 
 .globl sysexit;
@@ -15,7 +15,6 @@ sysexit:
   ret
 
 SYSCALL(fork)
-//SYSCALL(exit)
 SYSCALL(wait)
 SYSCALL(pipe)
 SYSCALL(read)

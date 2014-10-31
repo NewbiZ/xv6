@@ -1,5 +1,5 @@
-#include <ulibc/ulibc.h>
-#include <ulibc/stdio.h>
+#include <syscall.h>
+#include <stdio.h>
 
 char buf[512];
 

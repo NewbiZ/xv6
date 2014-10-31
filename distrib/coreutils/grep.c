@@ -1,6 +1,6 @@
-#include <ulibc/ulibc.h>
-#include <ulibc/string.h>
-#include <ulibc/stdio.h>
+#include <syscall.h>
+#include <string.h>
+#include <stdio.h>
 
 char buf[1024];
 int match(char*, char*);
@@ -15,7 +15,7 @@ grep(char *pattern, int fd)
   while((n = read(fd, buf+m, sizeof(buf)-m)) > 0){
     m += n;
     p = buf;
-    while((q = __ulibc_strchr(p, '\n')) != 0){
+    while((q = strchr(p, '\n')) != 0){
       *q = 0;
       if(match(pattern, p)){
         *q = '\n';
@@ -27,7 +27,7 @@ grep(char *pattern, int fd)
       m = 0;
     if(m > 0){
       m -= p - buf;
-      __ulibc_memmove(buf, p, m);
+      memmove(buf, p, m);
     }
   }
 }

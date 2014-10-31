@@ -1,6 +1,5 @@
-#include <ulibc/time.h>
-
-#include <ulibc/assert.h>
+#include <time.h>
+#include <assert.h>
 
 char* asctime(const struct tm* timeptr)
 {

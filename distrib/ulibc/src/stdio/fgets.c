@@ -1,5 +1,5 @@
-#include <ulibc/stdio.h>
-#include <ulibc/assert.h>
+#include <stdio.h>
+#include <assert.h>
 
 char* fgets(char* s, int n, FILE* stream)
 {

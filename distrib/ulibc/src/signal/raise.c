@@ -1,5 +1,5 @@
-#include <ulibc/signal.h>
-#include <ulibc/assert.h>
+#include <signal.h>
+#include <assert.h>
 
 int raise(int sig)
 {

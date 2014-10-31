@@ -1,5 +1,5 @@
-#include <ulibc/math.h>
-#include <ulibc/assert.h>
+#include <math.h>
+#include <assert.h>
 
 double exp(double x)
 {

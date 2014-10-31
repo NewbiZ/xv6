@@ -1,6 +1,6 @@
-#include <ulibc/assert.h>
-#include <ulibc/stdlib.h> // abort
-#include <ulibc/stdio.h> // fprintf
+#include <assert.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 void __ulibc_assert(const char* c, const char* file, int line)
 {

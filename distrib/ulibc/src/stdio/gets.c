@@ -1,9 +1,12 @@
-#include <ulibc/stdio.h>
-#include <ulibc/assert.h>
+#include <stdio.h>
+#include <syscall.h>
 
 char* gets(char* s)
 {
-  assert(0 && "not implemented yet.");
-  return 0;
+  char c;
+  while (read(0, &c, 1)>0 && c!='\n' && c!='\r')
+    *s++ = c;
+  *s = 0;
+  return s;
 }
 

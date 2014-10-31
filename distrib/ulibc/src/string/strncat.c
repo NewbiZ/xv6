@@ -1,6 +1,5 @@
-#include <ulibc/string.h>
-
-#include <ulibc/stdlib.h>
+#include <string.h>
+#include <stdlib.h>
 
 char* strncat(char* s1, const char* s2, size_t n)
 {

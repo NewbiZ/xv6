@@ -1,4 +1,4 @@
-#include <ulibc/stdio.h>
+#include <stdio.h>
 
 int fflush(FILE* f)
 {

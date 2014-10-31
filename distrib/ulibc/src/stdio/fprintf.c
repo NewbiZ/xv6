@@ -1,6 +1,5 @@
-#include <ulibc/stdio.h>
-
-#include <ulibc/stdarg.h>
+#include <stdio.h>
+#include <stdarg.h>
 
 int fprintf(FILE* f, const char* format, ...)
 {

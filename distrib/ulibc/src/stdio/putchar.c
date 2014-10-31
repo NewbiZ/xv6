@@ -1,5 +1,5 @@
-#include <ulibc/stdio.h>
-#include <ulibc/ulibc.h>
+#include <stdio.h>
+#include <syscall.h>
 
 int putchar(int c)
 {

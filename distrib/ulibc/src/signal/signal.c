@@ -1,5 +1,5 @@
-#include <ulibc/signal.h>
-#include <ulibc/assert.h>
+#include <signal.h>
+#include <assert.h>
 
 void (*signal(int sig, void (*func)(int)))(int)
 {

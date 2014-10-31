@@ -1,6 +1,5 @@
-#include <ulibc/string.h>
-
-#include <ulibc/stdlib.h>
+#include <string.h>
+#include <stdlib.h>
 
 void* memmove(void* s1, const void* s2, size_t n)
 {

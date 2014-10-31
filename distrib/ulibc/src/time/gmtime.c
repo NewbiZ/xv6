@@ -1,6 +1,5 @@
-#include <ulibc/time.h>
-
-#include <ulibc/assert.h>
+#include <time.h>
+#include <assert.h>
 
 struct tm* gmtime(const time_t* timer)
 {

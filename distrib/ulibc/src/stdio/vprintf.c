@@ -1,6 +1,5 @@
-#include <ulibc/stdio.h>
-
-#include <ulibc/stdarg.h>
+#include <stdio.h>
+#include <stdarg.h>
 
 int vprintf(const char* format, va_list arg)
 {

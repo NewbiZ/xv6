@@ -1,6 +1,5 @@
-#include <ulibc/string.h>
-
-#include <ulibc/stdlib.h>
+#include <string.h>
+#include <stdlib.h>
 
 size_t strlen(const char* s)
 {

@@ -1,6 +1,5 @@
-#include <ulibc/string.h>
-
-#include <ulibc/stdlib.h>
+#include <string.h>
+#include <stdlib.h>
 
 char* strrchr(const char* s, int c)
 {

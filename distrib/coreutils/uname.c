@@ -1,7 +1,7 @@
-#include <ulibc/ulibc.h>
-#include <ulibc/stdio.h>
-#include <ulibc/string.h>
-#include <ulibc/stdlib.h>
+#include <syscall.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 
 void print_kernel_name()
 {

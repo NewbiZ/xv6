@@ -1,4 +1,4 @@
-#include <ulibc/stdio.h>
+#include <stdio.h>
 
 #include <xv6/fcntl.h>
 

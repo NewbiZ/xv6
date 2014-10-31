@@ -1,7 +1,6 @@
-#include <ulibc/stdio.h>
-
-#include <ulibc/stdarg.h>
-#include <ulibc/assert.h>
+#include <stdio.h>
+#include <stdarg.h>
+#include <assert.h>
 
 void __fputi(FILE* f, int value, int base, int signd, int upper)
 {

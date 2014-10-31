@@ -1,7 +1,6 @@
-#include <ulibc/string.h>
-
-#include <ulibc/stdlib.h>
-#include <ulibc/errno.h>
+#include <string.h>
+#include <stdlib.h>
+#include <errno.h>
 
 int __ulibc_error_codes[] = {
 #define X(code, msg) code,

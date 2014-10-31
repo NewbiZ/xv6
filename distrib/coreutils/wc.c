@@ -1,6 +1,6 @@
-#include <ulibc/ulibc.h>
-#include <ulibc/stdio.h>
-#include <ulibc/string.h>
+#include <syscall.h>
+#include <stdio.h>
+#include <string.h>
 
 char buf[512];
 
@@ -17,7 +17,7 @@ wc(int fd, char *name)
       c++;
       if(buf[i] == '\n')
         l++;
-      if(__ulibc_strchr(" \r\t\n\v", buf[i]))
+      if(strchr(" \r\t\n\v", buf[i]))
         inword = 0;
       else if(!inword){
         w++;

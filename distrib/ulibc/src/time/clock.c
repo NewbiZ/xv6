@@ -1,6 +1,5 @@
-#include <ulibc/time.h>
-
-#include <ulibc/assert.h>
+#include <time.h>
+#include <assert.h>
 
 clock_t clock(void)
 {

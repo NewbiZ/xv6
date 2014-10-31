@@ -1,5 +1,5 @@
-#include <ulibc/ulibc.h>
-#include <ulibc/stdio.h>
+#include <syscall.h>
+#include <stdio.h>
 
 int
 main(int argc, char *argv[])

@@ -1,8 +1,7 @@
-#include <ulibc/stdlib.h>
-
-#include <ulibc/ulibc.h>
-#include <ulibc/ctype.h>
-#include <ulibc/assert.h>
+#include <stdlib.h>
+#include <syscall.h>
+#include <ctype.h>
+#include <assert.h>
 
 long int atol(const char* nptr)
 {

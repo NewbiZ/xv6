@@ -1,8 +1,7 @@
-#include <ulibc/stdio.h>
-
-#include <ulibc/string.h>
-#include <ulibc/stdlib.h>
-#include <ulibc/ulibc.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <syscall.h>
 
 #include <xv6/fcntl.h>
 

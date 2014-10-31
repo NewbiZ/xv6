@@ -1,8 +1,7 @@
-#include <ulibc/stdlib.h>
-
-#include <ulibc/ulibc.h>
-#include <ulibc/ctype.h>
-#include <ulibc/assert.h>
+#include <stdlib.h>
+#include <syscall.h>
+#include <ctype.h>
+#include <assert.h>
 
 // XOR shift 128, from Marsaglia, George: http://www.jstatsoft.org/v08/i14/paper
 // Maximal entropy: 2^128-1

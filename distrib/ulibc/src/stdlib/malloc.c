@@ -1,8 +1,9 @@
-#include <ulibc/stdlib.h>
+#include <stdlib.h>
+#include <syscall.h>
+#include <ctype.h>
+#include <assert.h>
 
-#include <ulibc/ulibc.h>
-#include <ulibc/ctype.h>
-#include <ulibc/assert.h>
+void* __ulibc_malloc(size_t);
 
 void* malloc(size_t size)
 {

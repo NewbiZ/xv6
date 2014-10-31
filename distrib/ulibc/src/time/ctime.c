@@ -1,6 +1,5 @@
-#include <ulibc/time.h>
-
-#include <ulibc/assert.h>
+#include <time.h>
+#include <assert.h>
 
 char* ctime(const time_t* timer)
 {

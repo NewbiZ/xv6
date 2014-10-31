@@ -1,7 +1,6 @@
-#include <ulibc/stdio.h>
-
-#include <ulibc/stdlib.h>
-#include <ulibc/ulibc.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <syscall.h>
 
 int fclose(FILE* f)
 {

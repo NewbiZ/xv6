@@ -1,7 +1,7 @@
 #ifndef ULIBC_STDIO_H
 #define ULIBC_STDIO_H
 
-#include <ulibc/stdarg.h>
+#include <stdarg.h>
 
 #ifdef __cplusplus
 extern "C" {

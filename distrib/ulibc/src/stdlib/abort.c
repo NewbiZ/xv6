@@ -1,8 +1,7 @@
-#include <ulibc/stdlib.h>
-
-#include <ulibc/ulibc.h>
-#include <ulibc/ctype.h>
-#include <ulibc/stdio.h>
+#include <stdlib.h>
+#include <syscall.h>
+#include <ctype.h>
+#include <stdio.h>
 
 void abort(void)
 {

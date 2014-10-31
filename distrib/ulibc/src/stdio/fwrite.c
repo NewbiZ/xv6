@@ -1,6 +1,5 @@
-#include <ulibc/stdio.h>
-
-#include <ulibc/ulibc.h>
+#include <stdio.h>
+#include <syscall.h>
 
 size_t fwrite(const void* ptr, size_t size, size_t nmemb, FILE* f)
 {
