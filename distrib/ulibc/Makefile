@@ -164,8 +164,7 @@ src/%.o: src/%.S
 	$(LOG_CC) $(CC) $(ASFLAGS) -c -o $@ src/$*.S
 
 $(DISTRIB_ULIBC): $(DISTRIB_ULIBC_OBJECTS)
-	#$(LOG_LD) $(LD) $(LDFLAGS) -retain-symbols-file symbols.def -r $(DISTRIB_ULIBC_OBJECTS) -o $(DISTRIB_ULIBC)
-	$(LOG_LD) $(LD) $(LDFLAGS) -r $(DISTRIB_ULIBC_OBJECTS) -o $(DISTRIB_ULIBC)
+	$(LOG_LD) $(LD) $(LDFLAGS) -retain-symbols-file symbols.def -r $(DISTRIB_ULIBC_OBJECTS) -o $(DISTRIB_ULIBC)
 
 clean:
 	$(LOG_CMD) $(RM) -rf $(DISTRIB_ULIBC)
