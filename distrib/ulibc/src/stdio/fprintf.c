@@ -1,9 +1,14 @@
 #include <ulibc/stdio.h>
-#include <ulibc/assert.h>
 
-int fprintf(FILE* stream, const char* format, ...)
+#include <ulibc/stdarg.h>
+
+int fprintf(FILE* f, const char* format, ...)
 {
-  assert(0 && "not implemented yet.");
-  return 0;
+  int count;
+  va_list ap;
+  va_start(ap, format);
+  count = vfprintf(f, format,ap);
+  va_end(ap);
+  return count;
 }
 

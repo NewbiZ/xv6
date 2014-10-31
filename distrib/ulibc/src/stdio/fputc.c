@@ -1,9 +1,11 @@
 #include <ulibc/stdio.h>
-#include <ulibc/assert.h>
 
-int fputc(int c, FILE* stream)
+#include <ulibc/ulibc.h>
+
+int fputc(int c, FILE* f)
 {
-  assert(0 && "not implemented yet.");
+  // TODO: should use buffering here depending on f->flags
+  write(f->fd, &c, 1);
   return 0;
 }
 
