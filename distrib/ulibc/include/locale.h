@@ -5,7 +5,11 @@
 extern "C" {
 #endif /* __cplusplus */
 
+#ifdef __cplusplus
 #define NULL 0L
+#else /* __cplusplus */
+#define NULL ((void*)0)
+#endif /* __cplusplus */
 
 #define LC_ALL      0
 #define LC_COLLATE  1

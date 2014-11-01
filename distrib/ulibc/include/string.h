@@ -10,7 +10,11 @@ extern "C" {
 typedef unsigned int size_t;
 #endif /* ULIBC_SIZE_T */
 
+#ifdef __cplusplus
 #define NULL 0L
+#else /* __cplusplus */
+#define NULL ((void*)0)
+#endif /* __cplusplus */
 
 void *memcpy(void *s1, const void *s2, size_t n);
 void *memmove(void *s1, const void *s2, size_t n);

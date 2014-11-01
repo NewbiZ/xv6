@@ -12,9 +12,13 @@ extern "C" {
 typedef unsigned int size_t;
 #endif /* ULIBC_SIZE_T */
 
-typedef unsigned int fpos_t;
-
+#ifdef __cplusplus
 #define NULL 0L
+#else /* __cplusplus */
+#define NULL ((void*)0)
+#endif /* __cplusplus */
+
+typedef unsigned int fpos_t;
 
 #define _IOFBF 0
 #define _IOLBF 1

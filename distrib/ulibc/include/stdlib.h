@@ -10,6 +10,12 @@ extern "C" {
 typedef unsigned int size_t;
 #endif /* ULIBC_SIZE_T */
 
+#ifdef __cplusplus
+#define NULL 0L
+#else /* __cplusplus */
+#define NULL ((void*)0)
+#endif /* __cplusplus */
+
 typedef char wchar_t;
 
 typedef struct
@@ -23,8 +29,6 @@ typedef struct
   long quot;
   long rem;
 } ldiv_t;
-
-#define NULL 0L
 
 #define EXIT_SUCCESS 0
 #define EXIT_FAILURE 1
