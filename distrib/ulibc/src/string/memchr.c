@@ -3,7 +3,7 @@
 
 void* memchr(const void* s, int c, size_t n)
 {
-  for (; n && *(unsigned char*)s!=c; ++s, --n);
+  while (n && *(unsigned char*)s!=c) { s = (const void*)((char*)s+1); --n; }
   return n ? (void*)s : NULL;
 }
 

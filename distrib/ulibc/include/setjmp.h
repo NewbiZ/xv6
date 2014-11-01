@@ -3,7 +3,7 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif /* __cplusplus */
 
 typedef unsigned int jmp_buf[6];
 
@@ -12,7 +12,7 @@ void longjmp(jmp_buf env, int val);
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif /* __cplusplus */
 
-#endif // ULIBC_SETJMP_H
+#endif /* ULIBC_SETJMP_H */
 

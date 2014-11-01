@@ -49,7 +49,7 @@ FILE* fopen(const char* filename, const char* mode)
   f->fd = fd;
   f->buffer = (char*)malloc(BUFSIZ);
   f->mode = fmode;
-  f->flags = _IOFBF; // TODO: Should be _IOLBF if f is a tty
+  f->flags = _IOFBF; /* TODO: Should be _IOLBF if f is a tty */
 
 out:
   return f;

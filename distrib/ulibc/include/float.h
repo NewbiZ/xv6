@@ -3,17 +3,17 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif /* __cplusplus */
 
-// float
-//TODO
+/* float */
+/* TODO */
 
-// double
-//TODO
+/* double */
+/* TODO */
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif /* __cplusplus */
 
-#endif // ULIBC_FLOAT_H
+#endif /* ULIBC_FLOAT_H */
 

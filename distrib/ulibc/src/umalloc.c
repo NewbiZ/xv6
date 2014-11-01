@@ -1,17 +1,16 @@
 #include <syscall.h>
-#include <xv6/types.h>
 #include <xv6/stat.h>
 #include <xv6/param.h>
 
-// Memory allocator by Kernighan and Ritchie,
-// The C programming Language, 2nd ed.  Section 8.7.
+/* Memory allocator by Kernighan and Ritchie,
+   The C programming Language, 2nd ed.  Section 8.7. */
 
 typedef long Align;
 
 union header {
   struct {
     union header *ptr;
-    uint size;
+    unsigned int size;
   } s;
   Align x;
 };
@@ -44,7 +43,7 @@ __ulibc_free(void *ap)
 }
 
 static Header*
-morecore(uint nu)
+morecore(unsigned int nu)
 {
   char *p;
   Header *hp;
@@ -61,10 +60,10 @@ morecore(uint nu)
 }
 
 void*
-__ulibc_malloc(uint nbytes)
+__ulibc_malloc(unsigned int nbytes)
 {
   Header *p, *prevp;
-  uint nunits;
+  unsigned int nunits;
 
   nunits = (nbytes + sizeof(Header) - 1)/sizeof(Header) + 1;
   if((prevp = freep) == 0){

@@ -3,9 +3,12 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif /* __cplusplus */
 
+#ifndef ULIBC_SIZE_T
+#define ULIBC_SIZE_T
 typedef unsigned int size_t;
+#endif /* ULIBC_SIZE_T */
 
 #define NULL 0L
 
@@ -34,7 +37,7 @@ size_t strlen(const char *s);
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif /* __cplusplus */
 
-#endif // ULIBC_STRING_H
+#endif /* ULIBC_STRING_H */
 

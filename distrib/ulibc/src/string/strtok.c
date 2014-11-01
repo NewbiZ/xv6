@@ -4,7 +4,6 @@
 
 char* strtok(char* s1, const char* s2)
 {
-  //TODO
   assert(0 && "not implemented yet.");
   return 0;
 }

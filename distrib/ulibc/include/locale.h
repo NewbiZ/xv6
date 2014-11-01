@@ -3,7 +3,7 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif /* __cplusplus */
 
 #define NULL 0L
 
@@ -41,7 +41,7 @@ struct lconv* localeconv(void);
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif /* __cplusplus */
 
-#endif // ULIBC_LOCALE_H
+#endif /* ULIBC_LOCALE_H */
 

@@ -7,7 +7,6 @@ void __ulibc_free(void *);
 
 void free(void* ptr)
 {
-  //TODO
   __ulibc_free(ptr);
 }
 

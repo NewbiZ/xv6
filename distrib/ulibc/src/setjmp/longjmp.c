@@ -14,7 +14,7 @@ void longjmp(jmp_buf env, int val)
     "mov %%ecx,      %%esp    \n\t"
     "mov 20(%[env]), %%ecx    \n\t"
     "jmp *%%ecx               \n\t"
-    : // No outputs
+    : /* No outputs */
     : [env] "r" (env),
       [val] "r" (val)
   );

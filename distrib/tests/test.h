@@ -1,12 +1,12 @@
 #ifndef ULIBC_TESTS_TEST_H
 #define ULIBC_TESTS_TEST_H
 
-#include <ulibc/ulibc.h>
-#include <ulibc/stdlib.h>
-#include <ulibc/stdio.h>
+#include <syscall.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 #undef NDEBUG
-#include <ulibc/assert.h>
+#include <assert.h>
 
 #define TEST_FLOAT(c, res)                        \
   {                                               \

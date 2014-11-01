@@ -3,7 +3,7 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif /* __cplusplus */
 
 #define EDOM      33
 #define ERANGE    34
@@ -12,7 +12,7 @@ extern int errno;
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif /* __cplusplus */
 
-#endif // ULIBC_ERRNO_H
+#endif /* ULIBC_ERRNO_H */
 

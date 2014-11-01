@@ -5,7 +5,6 @@
 
 double strtod(const char* nptr, char** endptr)
 {
-  //TODO
   assert(0 && "not implemented yet.");
   return 0;
 }

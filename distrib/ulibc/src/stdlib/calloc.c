@@ -5,7 +5,6 @@
 
 void* calloc(size_t nmemb, size_t size)
 {
-  //TODO
   assert(0 && "not implemented yet.");
   return 0;
 }

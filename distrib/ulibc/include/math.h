@@ -3,7 +3,7 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif /* __cplusplus */
 
 #define HUGE_VAL 1e40f
 
@@ -32,7 +32,7 @@ double fmod(double x, double y);
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif /* __cplusplus */
 
-#endif // ULIBC_MATH_H
+#endif /* ULIBC_MATH_H */
 

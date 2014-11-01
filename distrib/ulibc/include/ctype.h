@@ -3,9 +3,7 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
-
-// Only standard C locale is considered here
+#endif /* __cplusplus */
 
 int isalnum(int c);
 int isalpha(int c);
@@ -24,7 +22,7 @@ int toupper(int c);
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif /* __cplusplus */
 
-#endif // ULIBC_CTYPE_H
+#endif /* ULIBC_CTYPE_H */
 

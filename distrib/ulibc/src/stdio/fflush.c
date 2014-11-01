@@ -2,7 +2,7 @@
 
 int fflush(FILE* f)
 {
-  // TODO: should use buffering here, depending on f->flags
+  /* TODO: should use buffering here, depending on f->flags */
   return 0;
 }
 

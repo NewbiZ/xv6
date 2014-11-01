@@ -1,6 +1,6 @@
-#include <ulibc/ulibc.h>
-#include <ulibc/stdlib.h>
-#include <ulibc/string.h>
+#include <syscall.h>
+#include <stdlib.h>
+#include <string.h>
 
 #include "test.h"
 
@@ -262,7 +262,7 @@ void test_memset(void)
 
   TEST_BUFFER(output, expected, 10);
 }
-#include <ulibc/errno.h>
+#include <errno.h>
 // Spec: C89 section 4.11.6.2
 void test_strerror(void)
 {

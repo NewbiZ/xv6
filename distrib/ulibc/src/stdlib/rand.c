@@ -3,8 +3,8 @@
 #include <ctype.h>
 #include <assert.h>
 
-// XOR shift 128, from Marsaglia, George: http://www.jstatsoft.org/v08/i14/paper
-// Maximal entropy: 2^128-1
+/* XOR shift 128, from Marsaglia, George: http://www.jstatsoft.org/v08/i14/paper
+   Maximal entropy: 2^128-1 */
 static unsigned int __ulibc_srand_seed_x;
 static unsigned int __ulibc_srand_seed_y;
 static unsigned int __ulibc_srand_seed_z;

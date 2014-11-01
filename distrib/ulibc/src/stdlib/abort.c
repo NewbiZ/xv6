@@ -5,7 +5,6 @@
 
 void abort(void)
 {
-  //TODO
   fprintf(stderr, "Abort.\n");
   sysexit();
 }

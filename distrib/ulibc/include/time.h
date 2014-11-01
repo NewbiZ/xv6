@@ -3,13 +3,16 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif /* __cplusplus */
+
+#ifndef ULIBC_SIZE_T
+#define ULIBC_SIZE_T
+typedef unsigned int size_t;
+#endif /* ULIBC_SIZE_T */
 
 #define NULL 0L
 
 #define CLK_TCK 100
-
-typedef unsigned int size_t;
 
 typedef long clock_t;
 typedef long time_t;
@@ -39,7 +42,7 @@ size_t strftime(char* s, size_t maxsize, const char* format, const struct tm* ti
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif /* __cplusplus */
 
-#endif // ULIBC_TIME_H
+#endif /* ULIBC_TIME_H */
 

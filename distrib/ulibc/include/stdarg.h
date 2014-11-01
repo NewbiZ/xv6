@@ -3,10 +3,9 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif /* __cplusplus */
 
-// Requires gcc >= 3
-
+/* Requires gcc >= 3 */
 typedef __builtin_va_list va_list;
 
 #define va_start(l, p)  __builtin_va_start(l, p)
@@ -15,7 +14,7 @@ typedef __builtin_va_list va_list;
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif /* __cplusplus */
 
-#endif // ULIBC_STDARG_H
+#endif /* ULIBC_STDARG_H */
 

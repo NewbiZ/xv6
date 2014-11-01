@@ -3,9 +3,13 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif /* __cplusplus */
 
+#ifndef ULIBC_SIZE_T
+#define ULIBC_SIZE_T
 typedef unsigned int size_t;
+#endif /* ULIBC_SIZE_T */
+
 typedef char wchar_t;
 
 typedef struct
@@ -60,7 +64,7 @@ size_t wcstombs(char* s, const wchar_t* pwcs, size_t n);
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif /* __cplusplus */
 
-#endif // ULIBC_STDLIB_H
+#endif /* ULIBC_STDLIB_H */
 

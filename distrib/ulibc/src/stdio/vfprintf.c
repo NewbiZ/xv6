@@ -39,16 +39,17 @@ void __fputi(FILE* f, int value, int base, int signd, int upper)
 
 int vfprintf(FILE* f, const char* format, va_list ap)
 {
-  // specifier: c, d, i
+  /* specifier: c, d, i */
   int a_cdi;
-  // specifier: o, u, x, X
+  /* specifier: o, u, x, X */
   unsigned int a_ouxX;
-  // TODO: Handle doubles in fprintf
-  // specifier: e, E, f, F, g, G
-  //double a_eEfFgG;
-  // specifier: s
+  /* TODO: Handle doubles in fprintf */
+  /* specifier: e, E, f, F, g, G */
+  /* double a_eEfFgG; */
+  /* specifier: s */
   const char* a_s;
-  // specifier: p
+  char c;
+  /* specifier: p */
   const void* a_p;
 
   while(*format)
@@ -94,7 +95,6 @@ int vfprintf(FILE* f, const char* format, va_list ap)
           break;
         case 's':
           a_s = va_arg(ap, const char*);
-          char c;
           while ((c = *a_s++))
             fputc(c, f);
           break;

@@ -1,6 +1,6 @@
-#include <ulibc/ulibc.h>
-#include <ulibc/stdlib.h>
-#include <ulibc/limits.h>
+#include <syscall.h>
+#include <stdlib.h>
+#include <limits.h>
 
 #include "test.h"
 

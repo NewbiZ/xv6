@@ -5,7 +5,6 @@
 
 int mblen(const char* s, size_t n)
 {
-  //TODO
   assert(0 && "not implemented yet.");
   return 0;
 }

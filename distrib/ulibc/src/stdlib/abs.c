@@ -5,7 +5,6 @@
 
 int abs(int j)
 {
-  //TODO
   assert(0 && "not implemented yet.");
   return 0;
 }

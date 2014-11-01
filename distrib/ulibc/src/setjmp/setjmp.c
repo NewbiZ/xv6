@@ -11,7 +11,7 @@ int setjmp(jmp_buf env)
     "mov %%ecx,    16(%[env]) \n\t"
     "mov (%%esp),  %%ecx      \n\t"
     "mov %%ecx,    20(%[env]) \n\t"
-    : // No outputs
+    : /* No outputs */
     : [env] "r" (env)
   );
   return 0;

@@ -3,7 +3,7 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif /* __cplusplus */
 
 struct stat;
 
@@ -33,6 +33,6 @@ int halt(void);
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif /* __cplusplus */
 
-#endif // ULIBC_SYSCALL_H
+#endif /* ULIBC_SYSCALL_H */

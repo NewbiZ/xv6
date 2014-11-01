@@ -5,9 +5,8 @@
 
 div_t div(int numer, int denom)
 {
-  //TODO
-  assert(0 && "not implemented yet.");
   div_t r;
+  assert(0 && "not implemented yet.");
   return r;
 }
 

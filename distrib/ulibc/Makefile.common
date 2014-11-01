@@ -52,6 +52,8 @@ CFLAGS =                        \
 	-fno-strict-aliasing          \
 	-Wall                         \
 	-Werror                       \
+	-std=c89                      \
+	-Wpedantic                    \
 	-ggdb                         \
 	-m32                          \
 	-fno-omit-frame-pointer       \

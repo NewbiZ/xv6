@@ -3,7 +3,7 @@
 #include <ctype.h>
 #include <assert.h>
 
-// TODO: posix requires this 32 to be ATEXIT_MAX
+/* TODO: posix requires this 32 to be ATEXIT_MAX */
 static void (*__ulibc_atexit_func[32])(void);
 static void (**__ulibc_atexit_func_cur)(void) = __ulibc_atexit_func;
 

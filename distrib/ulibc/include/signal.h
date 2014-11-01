@@ -3,7 +3,7 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif /* __cplusplus */
 
 typedef int sig_atomic_t;
 
@@ -23,7 +23,7 @@ int raise(int sig);
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif /* __cplusplus */
 
-#endif // ULIBC_SIGNAL_H
+#endif /* ULIBC_SIGNAL_H */
 

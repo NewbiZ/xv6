@@ -5,7 +5,6 @@
 
 int system(const char* string)
 {
-  //TODO
   assert(0 && "not implemented yet.");
   return 0;
 }

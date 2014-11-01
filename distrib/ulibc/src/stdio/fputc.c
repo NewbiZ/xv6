@@ -3,7 +3,7 @@
 
 int fputc(int c, FILE* f)
 {
-  // TODO: should use buffering here depending on f->flags
+  /* TODO: should use buffering here depending on f->flags */
   write(f->fd, &c, 1);
   return 0;
 }

@@ -7,7 +7,6 @@ void* __ulibc_malloc(size_t);
 
 void* malloc(size_t size)
 {
-  //TODO
   return __ulibc_malloc(size);
 }
 
