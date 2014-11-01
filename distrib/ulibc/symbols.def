@@ -11,7 +11,6 @@ atoi
 atol
 base
 bsearch
-c_lconv
 calloc
 ceil
 chdir

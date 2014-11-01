@@ -2,7 +2,7 @@
 #include <stdarg.h>
 #include <assert.h>
 
-void __fputi(FILE* f, int value, int base, int signd, int upper)
+static void __fputi(FILE* f, int value, int base, int signd, int upper)
 {
   static const char digits_upper[] = "0123456789ABCDEF";
   static const char digits_lower[] = "0123456789abcdef";

@@ -1,7 +1,7 @@
 #include <locale.h>
 #include <limits.h>
 
-static struct lconv c_lconv = {
+static struct lconv __c_lconv = {
   ".",
   "",
   "",
@@ -24,6 +24,6 @@ static struct lconv c_lconv = {
 
 struct lconv* localeconv(void)
 {
-  return &c_lconv;
+  return &__c_lconv;
 }
 
