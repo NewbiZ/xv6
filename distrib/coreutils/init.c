@@ -10,14 +10,25 @@ char *argv[] = { "sh", 0 };
 
 void setup_devices(void)
 {
+  int f = 0;
   if(open("/dev/console", O_RDWR) < 0)
   {
     mknod("/dev/console", DEV_CONSOLE, 1);
     open("/dev/console", O_RDWR);
   }
 
+  if((f = open("/dev/null",O_RDWR)) >= 0){
+     close(f);
+     unlink("/dev/null");
+  }
+
   if(open("/dev/null", O_RDWR) < 0)
     mknod("/dev/null", DEV_NULL, 1);
+
+  if((f = open("/dev/zero",O_RDWR)) >= 0){
+     close(f);
+     unlink("/dev/zero");
+  }
 
   if(open("/dev/zero", O_RDWR) < 0)
     mknod("/dev/zero", DEV_ZERO, 1);
