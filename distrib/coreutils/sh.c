@@ -80,7 +80,7 @@ void builtin_cd(char* buffer)
 {
   // Clumsy but will have to do for now.
   // Chdir has no effect on the parent if run in the child.
-  buffer[strlen(buffer)-1] = 0;  // chop \n
+  buffer[strlen(buffer)] = 0;  // chop \n, but don't cut off too much
   if(chdir(buffer+3) < 0)
     fprintf(stderr, "cannot cd %s\n", buffer+3);
 }
