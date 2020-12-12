@@ -5,7 +5,7 @@
 
 div_t div(int numer, int denom)
 {
-  div_t r;
+  div_t r = {0};
   assert(0 && "not implemented yet.");
   return r;
 }
